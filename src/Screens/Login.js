@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { AsyncStorage, ImageBackground, StyleSheet, View } from 'react-native';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Button, Card, Input, Text } from 'react-native-elements';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Dusseldorf from '../../assets/Covers/Dusseldorf.png';
@@ -28,9 +28,7 @@ export default class Login extends Component{
               'Authorization': `Bearer ${this.state.token}`
             }})
         .then(function (response) {
-            console.log(response.data)
-            AsyncStorage.setItem('userData', response.data)
-            navigate('Home')
+            navigate('Home', {userData: response.data})
         })
         .catch(function (error) {
             console.log("Error in login", error);
