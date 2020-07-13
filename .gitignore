@@ -111,3 +111,8 @@ dist
 .expo-shared
 .yarn.lock
 .babel.config.js
+web-build/
+babel.config.js
+web-build/register-service-worker.js
+package-lock.json
+yarn.lock
