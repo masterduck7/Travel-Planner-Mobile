@@ -39,7 +39,7 @@ export default class Login extends Component{
     render(){
         return(
             <View>
-                <ImageBackground source={Dusseldorf} resizeMethod="resize" style={styles.image}>
+                <ImageBackground source={Dusseldorf} style={styles.image}>
                     < Text h1 style={{ position: "absolute" ,top: hp("10%") }}>Travel Planner</Text>
                     
                     <Card containerStyle={styles.loginCard}>
@@ -88,7 +88,6 @@ export default class Login extends Component{
 const styles = StyleSheet.create({
     image: {
       flex: 1,
-      resizeMode: "stretch",
       justifyContent: "center",
       alignItems: 'center', 
       width: wp("100%"),
