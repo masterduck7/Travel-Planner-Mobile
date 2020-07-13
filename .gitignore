@@ -105,3 +105,9 @@ dist
 
 # Mac
 .DS_Store
+
+# Expo
+.expo
+.expo-shared
+.yarn.lock
+.babel.config.js
