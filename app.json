@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "travel-planner",
+    "name": "Travel Planner",
     "slug": "travel-planner",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -21,6 +21,16 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "android": {
+      "versionCode": 1,
+      "package": "com.lpsoftware.travel_planner",
+      "permissions": [
+        "MANAGE_DOCUMENTS",
+        "READ_EXTERNAL_STORAGE",
+        "WAKE_LOCK",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     }
   }
 }
