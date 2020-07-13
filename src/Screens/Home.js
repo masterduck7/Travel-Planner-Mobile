@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { View } from 'react-native';
+import { Button, View } from 'react-native';
 
 export default class Home extends Component{
     constructor(props){
@@ -16,11 +16,22 @@ export default class Home extends Component{
         }
     }
 
-    componentWillMount(){
+    componentDidMount(){
         this.setState({
             userData: this.props.route.params.userData
         })
         this.getData(this.props.route.params.userData)
+    }
+
+    componentWillUnmount(){
+        this.setState({
+            userData: {},
+            nextTrips: [],
+            number_trips : 0,
+            number_flights : 0,
+            number_cities : 0,
+            totalYear : 0
+        })
     }
 
     getData(data){
@@ -83,10 +94,16 @@ export default class Home extends Component{
             .catch(error => console.log(error))
     }
 
+    logout(){
+        const { navigate } = this.props.navigation;
+        navigate('Login')
+    }
+
     render(){
         return(
             <View>
                 <h1>Hello World</h1>
+                <Button title="Logout" onPress={(e) => this.logout()} />
                 <h2>{this.state.userData.userLogged}</h2>
                 <h3>{this.state.totalYear}</h3>
                 <h3>{this.state.number_trips}</h3>
