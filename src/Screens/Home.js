@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button, Card, Icon, ListItem } from 'react-native-elements';
+import { Button, Card, Icon, ListItem, Divider } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 //import getEnvVars from '../Enviroment/env';
@@ -117,7 +117,7 @@ export default class Home extends Component{
 
     render(){
         return(
-            <View>
+            <View style={styles.viewHome}>
                 <Button title="Logout" buttonStyle={styles.buttonLogout} onPress={(e) => this.logout()} />
                 <Text style={styles.hello}>Hola {this.state.userData.userLogged}</Text>
                 <View style={styles.stat}>
@@ -174,6 +174,10 @@ export default class Home extends Component{
                         />
                     ))
                 }
+                <Divider style={{marginTop: hp('2%')}} />
+                <View style={styles.footer}>
+                    <Text style={styles.footerText}>By LPSoftware</Text>
+                </View>
             </View>
         )
     }
@@ -235,5 +239,16 @@ const styles = StyleSheet.create({
         marginBottom: hp('2%'),
         textAlign: 'center',
         fontSize: hp('3%')
+    },
+    footer: {
+        width: '100%',
+        marginTop: hp('2%'),
+        marginBottom: hp('2%')
+    },
+    footerText: {
+        textAlign: 'center',
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: hp('2%')
     }
 })
