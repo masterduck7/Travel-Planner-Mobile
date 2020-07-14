@@ -88,7 +88,7 @@ export default class Login extends Component{
 const styles = StyleSheet.create({
     image: {
       flex: 1,
-      justifyContent: "center",
+      justifyContent: 'center',
       alignItems: 'center', 
       width: wp("100%"),
       height: hp("100%")
@@ -97,7 +97,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(100,100,100, 0.5)',
         position: 'absolute',
         bottom: hp('7%'),
-        left: wp('8%'),
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginLeft: wp('-0.5%'),
         width: wp('80%'),
         borderRadius: 30,
         borderWidth: 2,
@@ -106,17 +109,15 @@ const styles = StyleSheet.create({
     loginUser: {
         marginTop: hp("0%"),
         marginBottom: hp('10%'),
-        left: wp('-3%'),
         width: wp('70%'),
-        height: hp('7.5%'),
+        height: hp('7%'),
         borderRadius: 20,
         borderWidth: 2
     },
     loginPass: {
         marginTop: hp("-8%"),
-        left: wp('-3%'),
         width: wp('70%'),
-        height: hp('7.5%'),
+        height: hp('7%'),
         borderRadius: 20,
         borderWidth: 2
     },
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     inputIcon: {
-        left: hp('-3%')
+        left: hp('-1%')
     },
     buttonTitle: {
         color: 'white'

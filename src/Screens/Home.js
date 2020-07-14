@@ -1,12 +1,17 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { Button, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Button, ListItem } from 'react-native-elements';
+import TouchableScale from 'react-native-touchable-scale';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+//import getEnvVars from '../Enviroment/env';
 
 export default class Home extends Component{
     constructor(props){
         super(props)
         this.state={
+            //imageApiURL: '',
             userData: {},
             nextTrips: [],
             number_trips : 0,
@@ -17,6 +22,7 @@ export default class Home extends Component{
     }
 
     componentDidMount(){
+        //getEnvVars().then(vars => this.setState({imageApiURL: vars.default.imageApiURL}));
         this.setState({
             userData: this.props.route.params.userData
         })
@@ -50,7 +56,7 @@ export default class Home extends Component{
                     let total_hotels = 0
                     let total_flights = 0
                     res.data.forEach(trip => {
-                        if ( (moment(trip.start_date).fromNow()).includes("en") && nextTrips.length < 7 ) {
+                        if ( ((moment(trip.start_date).fromNow()).includes("in") || (moment(trip.start_date).fromNow()).includes("en")) && nextTrips.length < 7 ) {
                             nextTrips.push(
                                 {
                                     'destination': trip.destination,
@@ -80,6 +86,10 @@ export default class Home extends Component{
                             });
                         }
                     });
+                    nextTrips = nextTrips.sort(function(a, b) {
+                        var dateA = new Date(a.start_date), dateB = new Date(b.start_date);
+                        return dateA - dateB;
+                    });
                     this.setState({
                         number_trips : number_trips,
                         number_flights : number_flights,
@@ -87,6 +97,7 @@ export default class Home extends Component{
                         nextTrips: nextTrips,
                         totalYear : total_city_cost + total_activities + total_hotels + total_flights
                     })
+                    this.getTripsImages(nextTrips)
                 }else{
                     console.log("Error in Get All Trip data")
                 }
@@ -99,17 +110,62 @@ export default class Home extends Component{
         navigate('Login')
     }
 
+    goDetails(){
+        event.preventDefault();
+        alert("Hello World")
+    }
+
     render(){
         return(
             <View>
-                <h1>Hello World</h1>
-                <Button title="Logout" onPress={(e) => this.logout()} />
+                <Button title="Logout" buttonStyle={styles.buttonLogout} onPress={(e) => this.logout()} />
                 <h2>{this.state.userData.userLogged}</h2>
                 <h3>{this.state.totalYear}</h3>
                 <h3>{this.state.number_trips}</h3>
                 <h3>{this.state.number_flights}</h3>
                 <h3>{this.state.number_cities}</h3>
+                <h2 style={{textAlign: 'center'}}>Siguientes 7 viajes</h2>
+                {
+                    this.state.nextTrips.map((item, i) => (
+                        <ListItem
+                            key={i}
+                            Component={TouchableScale}
+                            friction={90}
+                            tension={100}
+                            title={item.destination}
+                            subtitle= {moment(item.start_date).format('DD/MM/YYYY').concat(" - ", moment(item.end_date).format('DD/MM/YYYY'))}
+                            titleStyle={styles.titleStyle}
+                            subtitleStyle={{ color: 'white' }}
+                            containerStyle={styles.containerList}
+                            contentContainerStyle={{marginLeft: '5%'}}
+                            onPress={(e)=> this.goDetails()}
+                        />
+                    ))
+                }
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    containerList: {
+        backgroundColor: 'gray',
+        marginLeft: '3%',
+        marginRight: '3%',
+        marginTop: '2%',
+        borderRadius: 30,
+        borderWidth: 0
+    },
+    titleStyle: {
+        color: 'white',
+        fontWeight: 'bold'
+    },
+    buttonLogout: {
+        width: wp('20%'),
+        borderRadius: 20,
+        borderWidth: 0,
+        position: 'absolute',
+        right: wp('5%'),
+        top: hp('2%')
+    }
+})
