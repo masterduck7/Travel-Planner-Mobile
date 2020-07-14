@@ -4,6 +4,8 @@ import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Button, Card, Input, Text } from 'react-native-elements';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Dusseldorf from '../../assets/Covers/Dusseldorf.png';
+import { Ionicons } from '@expo/vector-icons';
+
 
 export default class Login extends Component{
 
@@ -38,7 +40,7 @@ export default class Login extends Component{
 
     render(){
         return(
-            <View>
+            <View style={{flex: 1 , flexDirection: 'row'}}>
                 <ImageBackground source={Dusseldorf} style={styles.image}>
                     < Text h1 style={{ position: "absolute" ,top: hp("10%") }}>Travel Planner</Text>
                     
@@ -50,7 +52,7 @@ export default class Login extends Component{
                                 inputContainerStyle={styles.textLogin}
                                 placeholderTextColor="gray"
                                 placeholder='Username'
-                                leftIcon={{ type: 'font-awesome', name: 'user' }}
+                                leftIcon={<Ionicons name='md-person' size={20}/>}
                                 onChangeText={text => this.setState({username:text})}
                             />
                         </Card>
@@ -62,7 +64,7 @@ export default class Login extends Component{
                                 placeholderTextColor="gray"
                                 placeholder='Password'
                                 secureTextEntry
-                                leftIcon={{ type: 'font-awesome', name: 'key' }}
+                                leftIcon={<Ionicons name='md-key' size={20}/>}
                                 onChangeText={text => this.setState({password:text})}
                             />
                         </Card>
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     inputIcon: {
-        left: hp('-1%')
+        left: hp('-2%')
     },
     buttonTitle: {
         color: 'white'

@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { StyleSheet, Text, View } from 'react-native';
-import { Button, Card, Icon, ListItem, Divider } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Card, ListItem, Divider } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { ScrollView } from 'react-native-gesture-handler';
 //import getEnvVars from '../Enviroment/env';
 
 export default class Home extends Component{
@@ -97,7 +99,6 @@ export default class Home extends Component{
                         nextTrips: nextTrips,
                         totalYear : total_city_cost + total_activities + total_hotels + total_flights
                     })
-                    this.getTripsImages(nextTrips)
                 }else{
                     console.log("Error in Get All Trip data")
                 }
@@ -105,33 +106,36 @@ export default class Home extends Component{
             .catch(error => console.log(error))
     }
 
-    logout(){
+    logout(e){
         const { navigate } = this.props.navigation;
         navigate('Login')
     }
 
-    goDetails(){
-        event.preventDefault();
+    goDetails(e){
+        e.preventDefault();
         alert("Hello World")
     }
 
     render(){
         return(
-            <View style={styles.viewHome}>
-                <Button title="Logout" buttonStyle={styles.buttonLogout} onPress={(e) => this.logout()} />
+            <ScrollView style={styles.viewHome}>
                 <Text style={styles.hello}>Hola {this.state.userData.userLogged}</Text>
+                <TouchableScale style={styles.buttonLogout} friction={90} tension={100} onPress={(e) => this.logout(e)}>
+                    <Text style={styles.buttonText}>Logout</Text>
+                </TouchableScale>
+                <Text style={styles.titleStats}>Estadisticas año actual</Text>
                 <View style={styles.stat}>
                     <Card containerStyle={styles.statCard}>
                         <Text style={styles.statText}>
-                            <Icon type='font-awesome' name='dollar' /> {this.state.totalYear}
+                            <Ionicons size={30} name='md-card' /> {this.state.totalYear}
                         </Text>
                         <Text style={styles.statTextSub}>
-                            Gastos año actual
+                            Gastos
                         </Text>
                     </Card>
                     <Card containerStyle={styles.statCard}>
                         <Text style={styles.statText}>
-                            <Icon type='font-awesome' name='suitcase' /> {this.state.number_trips}
+                            <Ionicons size={30} name='md-briefcase' /> {this.state.number_trips}
                         </Text>
                         <Text style={styles.statTextSub}>
                             Viajes
@@ -141,7 +145,7 @@ export default class Home extends Component{
                 <View style={styles.stat}>
                     <Card containerStyle={styles.statCard}>
                         <Text style={styles.statText}>
-                            <Icon type='font-awesome' name='plane' /> {this.state.number_flights}
+                            <Ionicons size={30} name='md-airplane' /> {this.state.number_flights}
                         </Text>
                         <Text style={styles.statTextSub}>
                             Vuelos
@@ -149,7 +153,7 @@ export default class Home extends Component{
                     </Card>
                     <Card containerStyle={styles.statCard}>
                         <Text style={styles.statText}>
-                            <Icon type='font-awesome' name='building' /> {this.state.number_cities}
+                            <Ionicons size={30} name='md-business' /> {this.state.number_cities}
                         </Text>
                         <Text style={styles.statTextSub}>
                             Ciudades
@@ -170,7 +174,7 @@ export default class Home extends Component{
                             subtitleStyle={styles.subtitleStyle}
                             containerStyle={styles.containerList}
                             contentContainerStyle={{marginLeft: '5%'}}
-                            onPress={(e)=> this.goDetails()}
+                            onPress={(e)=> this.goDetails(e)}
                         />
                     ))
                 }
@@ -178,12 +182,16 @@ export default class Home extends Component{
                 <View style={styles.footer}>
                     <Text style={styles.footerText}>By LPSoftware</Text>
                 </View>
-            </View>
+            </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    viewHome: {
+        flex: 1,
+        flexDirection: 'column'
+    },
     containerList: {
         backgroundColor: '#298ad9',
         marginLeft: '4%',
@@ -195,50 +203,65 @@ const styles = StyleSheet.create({
     titleStyle: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: hp('2.5%')
+        fontSize: hp('2%')
     },
     subtitleStyle: {
         color: 'white',
-        fontSize: hp('2%')
+        fontSize: hp('1.5%')
     },
     buttonLogout: {
+        backgroundColor: '#298ad9',
         width: wp('20%'),
+        height: hp('5%'),
         borderRadius: 20,
-        borderWidth: 2,
         position: 'absolute',
         right: wp('4%'),
-        marginTop: hp('3%'),
-        marginBottom: hp('2%')
+        top: hp('4%'),
+        marginBottom: hp('-5%'),
+        padding: 10
+    },
+    buttonText: {
+        fontSize: hp('1.7%'),
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center'
+    },
+    titleStats: {
+        marginTop: hp('1%'),
+        marginBottom: hp('1%'),
+        textAlign: 'center',
+        fontSize: hp('2.5%')
     },
     stat: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'center'
     },
     statCard: {
         width: wp('40%'),
-        textAlign: 'center',
+        alignItems: 'center',
         borderRadius: 10,
         borderWidth: 2
     },
     statText: {
-        fontSize: hp('3.5%')
+        fontSize: hp('2.5%'),
+        textAlign: 'center'
     },
     statTextSub:{
-        fontSize: hp('2%'),
+        textAlign: 'center',
+        fontSize: hp('1.5%'),
         marginTop: hp('1%')
     },
     hello: {
-        marginTop: hp('4%'),
+        marginTop: hp('5%'),
         marginBottom: hp('2%'),
-        marginLeft: wp('3%'),
-        fontSize: hp('3%'),
+        marginLeft: wp('5%'),
+        fontSize: hp('2%'),
     },
     nextTrips: {
-        marginTop: hp('4%'),
+        marginTop: hp('2%'),
         marginBottom: hp('2%'),
         textAlign: 'center',
-        fontSize: hp('3%')
+        fontSize: hp('2.5%')
     },
     footer: {
         width: '100%',
