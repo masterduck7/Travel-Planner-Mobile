@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { Button, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, Text, View } from 'react-native';
+import { Card, ListItem, Divider } from 'react-native-elements';
+import TouchableScale from 'react-native-touchable-scale';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { ScrollView } from 'react-native-gesture-handler';
+//import getEnvVars from '../Enviroment/env';
 
 export default class Home extends Component{
     constructor(props){
         super(props)
         this.state={
+            //imageApiURL: '',
             userData: {},
             nextTrips: [],
             number_trips : 0,
@@ -17,6 +24,7 @@ export default class Home extends Component{
     }
 
     componentDidMount(){
+        //getEnvVars().then(vars => this.setState({imageApiURL: vars.default.imageApiURL}));
         this.setState({
             userData: this.props.route.params.userData
         })
@@ -50,7 +58,7 @@ export default class Home extends Component{
                     let total_hotels = 0
                     let total_flights = 0
                     res.data.forEach(trip => {
-                        if ( (moment(trip.start_date).fromNow()).includes("en") && nextTrips.length < 7 ) {
+                        if ( ((moment(trip.start_date).fromNow()).includes("in") || (moment(trip.start_date).fromNow()).includes("en")) && nextTrips.length < 7 ) {
                             nextTrips.push(
                                 {
                                     'destination': trip.destination,
@@ -80,6 +88,10 @@ export default class Home extends Component{
                             });
                         }
                     });
+                    nextTrips = nextTrips.sort(function(a, b) {
+                        var dateA = new Date(a.start_date), dateB = new Date(b.start_date);
+                        return dateA - dateB;
+                    });
                     this.setState({
                         number_trips : number_trips,
                         number_flights : number_flights,
@@ -94,22 +106,207 @@ export default class Home extends Component{
             .catch(error => console.log(error))
     }
 
-    logout(){
+    logout(e){
         const { navigate } = this.props.navigation;
         navigate('Login')
     }
 
+    goDetails(e){
+        e.preventDefault();
+        alert("Hello World")
+    }
+
     render(){
         return(
-            <View>
-                <h1>Hello World</h1>
-                <Button title="Logout" onPress={(e) => this.logout()} />
-                <h2>{this.state.userData.userLogged}</h2>
-                <h3>{this.state.totalYear}</h3>
-                <h3>{this.state.number_trips}</h3>
-                <h3>{this.state.number_flights}</h3>
-                <h3>{this.state.number_cities}</h3>
-            </View>
+            <ScrollView style={styles.viewHome}>
+                <Text style={styles.hello}>Hola {this.state.userData.userLogged}</Text>
+                <TouchableScale style={styles.buttonLogout} friction={90} tension={100} onPress={(e) => this.logout(e)}>
+                    <Text style={styles.buttonText}>Logout</Text>
+                </TouchableScale>
+                <View style={styles.cardButtonContainer}>
+                    <TouchableScale style={styles.cardButtonMyTrips} friction={90} tension={100} onPress={(e) => this.goDetails(e)}>
+                        <Text style={styles.cardButtonText}>Mis viajes</Text>
+                    </TouchableScale>
+                    <TouchableScale style={styles.cardButtonStats} friction={90} tension={100} onPress={(e) => this.goDetails(e)}>
+                        <Text style={styles.cardButtonText}>Estadisticas</Text>
+                    </TouchableScale>
+                </View>
+                    <Text style={styles.titleStats}>Progreso año actual</Text>
+                <View style={styles.stat}>
+                    <Card containerStyle={styles.statCard}>
+                        <Text style={styles.statText}>
+                            <Ionicons size={30} name='md-card' /> {this.state.totalYear}
+                        </Text>
+                        <Text style={styles.statTextSub}>
+                            Gastos
+                        </Text>
+                    </Card>
+                    <Card containerStyle={styles.statCard}>
+                        <Text style={styles.statText}>
+                            <Ionicons size={30} name='md-briefcase' /> {this.state.number_trips}
+                        </Text>
+                        <Text style={styles.statTextSub}>
+                            Viajes
+                        </Text>
+                    </Card>
+                </View>
+                {/* <View style={styles.stat}>
+                    <Card containerStyle={styles.statCard}>
+                        <Text style={styles.statText}>
+                            <Ionicons size={30} name='md-airplane' /> {this.state.number_flights}
+                        </Text>
+                        <Text style={styles.statTextSub}>
+                            Vuelos
+                        </Text>
+                    </Card>
+                    <Card containerStyle={styles.statCard}>
+                        <Text style={styles.statText}>
+                            <Ionicons size={30} name='md-business' /> {this.state.number_cities}
+                        </Text>
+                        <Text style={styles.statTextSub}>
+                            Ciudades
+                        </Text>
+                    </Card>
+                </View> */}
+                <Text style={styles.nextTrips}>Siguientes 7 viajes</Text>
+                {
+                    this.state.nextTrips.map((item, i) => (
+                        <ListItem
+                            key={i}
+                            Component={TouchableScale}
+                            friction={90}
+                            tension={100}
+                            title={item.destination}
+                            subtitle= {moment(item.start_date).format('DD/MM/YYYY').concat(" - ", moment(item.end_date).format('DD/MM/YYYY'))}
+                            titleStyle={styles.titleStyle}
+                            subtitleStyle={styles.subtitleStyle}
+                            containerStyle={styles.containerList}
+                            contentContainerStyle={{marginLeft: '5%'}}
+                            onPress={(e)=> this.goDetails(e)}
+                        />
+                    ))
+                }
+                <Divider style={{marginTop: hp('2%')}} />
+                <View style={styles.footer}>
+                    <Text style={styles.footerText}>By LPSoftware</Text>
+                </View>
+            </ScrollView>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    viewHome: {
+        flex: 1,
+        flexDirection: 'column'
+    },
+    containerList: {
+        backgroundColor: '#0275D8',
+        marginLeft: '4%',
+        marginRight: '4%',
+        marginTop: '2%',
+        borderRadius: 30,
+        borderWidth: 0
+    },
+    titleStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: hp('2%')
+    },
+    subtitleStyle: {
+        color: 'white',
+        fontSize: hp('1.5%')
+    },
+    buttonLogout: {
+        backgroundColor: '#D9534F',
+        width: wp('20%'),
+        height: hp('5%'),
+        borderRadius: 10,
+        position: 'absolute',
+        right: wp('4%'),
+        top: hp('4%'),
+        marginBottom: hp('-5%'),
+        padding: 10
+    },
+    buttonText: {
+        fontSize: hp('1.7%'),
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center'
+    },
+    titleStats: {
+        marginTop: hp('2%'),
+        marginBottom: hp('1%'),
+        textAlign: 'center',
+        fontSize: hp('2.5%')
+    },
+    stat: {
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    statCard: {
+        width: wp('40%'),
+        alignItems: 'center',
+        borderRadius: 10,
+        borderWidth: 2
+    },
+    statText: {
+        fontSize: hp('2.5%'),
+        textAlign: 'center'
+    },
+    statTextSub:{
+        textAlign: 'center',
+        fontSize: hp('1.5%'),
+        marginTop: hp('1%')
+    },
+    hello: {
+        marginTop: hp('5%'),
+        marginBottom: hp('2%'),
+        marginLeft: wp('5%'),
+        fontSize: hp('2%'),
+    },
+    nextTrips: {
+        marginTop: hp('2%'),
+        marginBottom: hp('2%'),
+        textAlign: 'center',
+        fontSize: hp('2.5%')
+    },
+    footer: {
+        width: '100%',
+        marginTop: hp('2%'),
+        marginBottom: hp('2%')
+    },
+    footerText: {
+        textAlign: 'center',
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: hp('1.5%')
+    },
+    cardButtonStats: {
+        backgroundColor: '#5CB85C',
+        width: wp('40%'),
+        height: hp('7%'),
+        justifyContent: 'center',
+        borderRadius: 10
+    },
+    cardButtonMyTrips: {
+        backgroundColor: '#0275D8',
+        width: wp('40%'),
+        height: hp('7%'),
+        justifyContent: 'center',
+        borderRadius: 10
+    },
+    cardButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: hp('2%'),
+        marginLeft: wp('3%'),
+        marginRight: wp('3%')
+    },
+    cardButtonText: {
+        fontSize: hp('2%'),
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center'
+    }
+})

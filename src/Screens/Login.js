@@ -4,6 +4,8 @@ import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Button, Card, Input, Text } from 'react-native-elements';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Dusseldorf from '../../assets/Covers/Dusseldorf.png';
+import { Ionicons } from '@expo/vector-icons';
+
 
 export default class Login extends Component{
 
@@ -38,29 +40,31 @@ export default class Login extends Component{
 
     render(){
         return(
-            <View>
+            <View style={{flex: 1 , flexDirection: 'row'}}>
                 <ImageBackground source={Dusseldorf} style={styles.image}>
                     < Text h1 style={{ position: "absolute" ,top: hp("10%") }}>Travel Planner</Text>
                     
                     <Card containerStyle={styles.loginCard}>
                         <Card containerStyle={styles.loginUser}>
                             <Input
+                                inputStyle={{width: '50%'}}
                                 leftIconContainerStyle={styles.inputIcon}
                                 inputContainerStyle={styles.textLogin}
                                 placeholderTextColor="gray"
                                 placeholder='Username'
-                                leftIcon={{ type: 'font-awesome', name: 'user' }}
+                                leftIcon={<Ionicons name='md-person' size={20}/>}
                                 onChangeText={text => this.setState({username:text})}
                             />
                         </Card>
                         <Card containerStyle={styles.loginPass}>
                             <Input
+                                inputStyle={{width: '50%'}}
                                 leftIconContainerStyle={styles.inputIcon}
                                 inputContainerStyle={styles.textLogin}
                                 placeholderTextColor="gray"
                                 placeholder='Password'
                                 secureTextEntry
-                                leftIcon={{ type: 'font-awesome', name: 'key' }}
+                                leftIcon={<Ionicons name='md-key' size={20}/>}
                                 onChangeText={text => this.setState({password:text})}
                             />
                         </Card>
@@ -87,17 +91,21 @@ export default class Login extends Component{
 
 const styles = StyleSheet.create({
     image: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: 'center', 
-      width: wp("100%"),
-      height: hp("100%")
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center', 
+        width: wp("100%"),
+        height: hp("100%")
     },
     loginCard: {
         backgroundColor: 'rgba(100,100,100, 0.5)',
         position: 'absolute',
         bottom: hp('7%'),
-        left: wp('8%'),
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginLeft: wp('-0.5%'),
         width: wp('80%'),
         borderRadius: 30,
         borderWidth: 2,
@@ -106,23 +114,21 @@ const styles = StyleSheet.create({
     loginUser: {
         marginTop: hp("0%"),
         marginBottom: hp('10%'),
-        left: wp('-3%'),
         width: wp('70%'),
-        height: hp('7.5%'),
+        height: hp('7%'),
         borderRadius: 20,
         borderWidth: 2
     },
     loginPass: {
         marginTop: hp("-8%"),
-        left: wp('-3%'),
         width: wp('70%'),
-        height: hp('7.5%'),
+        height: hp('7%'),
         borderRadius: 20,
         borderWidth: 2
     },
     textLogin: {
         borderBottomWidth: 0,
-        marginTop: hp('-1.5%')
+        marginTop: hp('-2%')
     },
     loginButton: {
         marginTop: hp("2%"),
@@ -139,7 +145,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     inputIcon: {
-        left: hp('-3%')
+        left: hp('-2%')
     },
     buttonTitle: {
         color: 'white'

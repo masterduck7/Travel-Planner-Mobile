@@ -116,3 +116,6 @@ babel.config.js
 web-build/register-service-worker.js
 package-lock.json
 yarn.lock
+
+# Env files
+src/Enviroment/envDev.js
