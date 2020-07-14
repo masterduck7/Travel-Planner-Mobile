@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { StyleSheet, View } from 'react-native';
-import { Button, ListItem } from 'react-native-elements';
+import { StyleSheet, Text, View } from 'react-native';
+import { Button, Card, Icon, ListItem } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 //import getEnvVars from '../Enviroment/env';
@@ -119,12 +119,44 @@ export default class Home extends Component{
         return(
             <View>
                 <Button title="Logout" buttonStyle={styles.buttonLogout} onPress={(e) => this.logout()} />
-                <h2>{this.state.userData.userLogged}</h2>
-                <h3>{this.state.totalYear}</h3>
-                <h3>{this.state.number_trips}</h3>
-                <h3>{this.state.number_flights}</h3>
-                <h3>{this.state.number_cities}</h3>
-                <h2 style={{textAlign: 'center'}}>Siguientes 7 viajes</h2>
+                <Text style={styles.hello}>Hola {this.state.userData.userLogged}</Text>
+                <View style={styles.stat}>
+                    <Card containerStyle={styles.statCard}>
+                        <Text style={styles.statText}>
+                            <Icon type='font-awesome' name='dollar' /> {this.state.totalYear}
+                        </Text>
+                        <Text style={styles.statTextSub}>
+                            Gastos año actual
+                        </Text>
+                    </Card>
+                    <Card containerStyle={styles.statCard}>
+                        <Text style={styles.statText}>
+                            <Icon type='font-awesome' name='suitcase' /> {this.state.number_trips}
+                        </Text>
+                        <Text style={styles.statTextSub}>
+                            Viajes
+                        </Text>
+                    </Card>
+                </View>
+                <View style={styles.stat}>
+                    <Card containerStyle={styles.statCard}>
+                        <Text style={styles.statText}>
+                            <Icon type='font-awesome' name='plane' /> {this.state.number_flights}
+                        </Text>
+                        <Text style={styles.statTextSub}>
+                            Vuelos
+                        </Text>
+                    </Card>
+                    <Card containerStyle={styles.statCard}>
+                        <Text style={styles.statText}>
+                            <Icon type='font-awesome' name='building' /> {this.state.number_cities}
+                        </Text>
+                        <Text style={styles.statTextSub}>
+                            Ciudades
+                        </Text>
+                    </Card>
+                </View>
+                <Text style={styles.nextTrips}>Siguientes 7 viajes</Text>
                 {
                     this.state.nextTrips.map((item, i) => (
                         <ListItem
@@ -135,7 +167,7 @@ export default class Home extends Component{
                             title={item.destination}
                             subtitle= {moment(item.start_date).format('DD/MM/YYYY').concat(" - ", moment(item.end_date).format('DD/MM/YYYY'))}
                             titleStyle={styles.titleStyle}
-                            subtitleStyle={{ color: 'white' }}
+                            subtitleStyle={styles.subtitleStyle}
                             containerStyle={styles.containerList}
                             contentContainerStyle={{marginLeft: '5%'}}
                             onPress={(e)=> this.goDetails()}
@@ -149,23 +181,59 @@ export default class Home extends Component{
 
 const styles = StyleSheet.create({
     containerList: {
-        backgroundColor: 'gray',
-        marginLeft: '3%',
-        marginRight: '3%',
+        backgroundColor: '#298ad9',
+        marginLeft: '4%',
+        marginRight: '4%',
         marginTop: '2%',
         borderRadius: 30,
         borderWidth: 0
     },
     titleStyle: {
         color: 'white',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: hp('2.5%')
+    },
+    subtitleStyle: {
+        color: 'white',
+        fontSize: hp('2%')
     },
     buttonLogout: {
         width: wp('20%'),
         borderRadius: 20,
-        borderWidth: 0,
+        borderWidth: 2,
         position: 'absolute',
-        right: wp('5%'),
-        top: hp('2%')
+        right: wp('4%'),
+        marginTop: hp('3%'),
+        marginBottom: hp('2%')
+    },
+    stat: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    statCard: {
+        width: wp('40%'),
+        textAlign: 'center',
+        borderRadius: 10,
+        borderWidth: 2
+    },
+    statText: {
+        fontSize: hp('3.5%')
+    },
+    statTextSub:{
+        fontSize: hp('2%'),
+        marginTop: hp('1%')
+    },
+    hello: {
+        marginTop: hp('4%'),
+        marginBottom: hp('2%'),
+        marginLeft: wp('3%'),
+        fontSize: hp('3%'),
+    },
+    nextTrips: {
+        marginTop: hp('4%'),
+        marginBottom: hp('2%'),
+        textAlign: 'center',
+        fontSize: hp('3%')
     }
 })

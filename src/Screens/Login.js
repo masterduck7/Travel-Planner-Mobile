@@ -45,6 +45,7 @@ export default class Login extends Component{
                     <Card containerStyle={styles.loginCard}>
                         <Card containerStyle={styles.loginUser}>
                             <Input
+                                inputStyle={{width: '50%'}}
                                 leftIconContainerStyle={styles.inputIcon}
                                 inputContainerStyle={styles.textLogin}
                                 placeholderTextColor="gray"
@@ -55,6 +56,7 @@ export default class Login extends Component{
                         </Card>
                         <Card containerStyle={styles.loginPass}>
                             <Input
+                                inputStyle={{width: '50%'}}
                                 leftIconContainerStyle={styles.inputIcon}
                                 inputContainerStyle={styles.textLogin}
                                 placeholderTextColor="gray"
@@ -87,11 +89,12 @@ export default class Login extends Component{
 
 const styles = StyleSheet.create({
     image: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center', 
-      width: wp("100%"),
-      height: hp("100%")
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center', 
+        width: wp("100%"),
+        height: hp("100%")
     },
     loginCard: {
         backgroundColor: 'rgba(100,100,100, 0.5)',
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
     },
     textLogin: {
         borderBottomWidth: 0,
-        marginTop: hp('-1.5%')
+        marginTop: hp('-2%')
     },
     loginButton: {
         marginTop: hp("2%"),
