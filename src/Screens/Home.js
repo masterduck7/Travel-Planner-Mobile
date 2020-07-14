@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button, Card, ListItem, Divider } from 'react-native-elements';
+import { StyleSheet, Text, View } from 'react-native';
+import { Card, ListItem, Divider } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -123,7 +123,15 @@ export default class Home extends Component{
                 <TouchableScale style={styles.buttonLogout} friction={90} tension={100} onPress={(e) => this.logout(e)}>
                     <Text style={styles.buttonText}>Logout</Text>
                 </TouchableScale>
-                <Text style={styles.titleStats}>Estadisticas año actual</Text>
+                <View style={styles.cardButtonContainer}>
+                    <TouchableScale style={styles.cardButtonMyTrips} friction={90} tension={100} onPress={(e) => this.goDetails(e)}>
+                        <Text style={styles.cardButtonText}>Mis viajes</Text>
+                    </TouchableScale>
+                    <TouchableScale style={styles.cardButtonStats} friction={90} tension={100} onPress={(e) => this.goDetails(e)}>
+                        <Text style={styles.cardButtonText}>Estadisticas</Text>
+                    </TouchableScale>
+                </View>
+                    <Text style={styles.titleStats}>Progreso año actual</Text>
                 <View style={styles.stat}>
                     <Card containerStyle={styles.statCard}>
                         <Text style={styles.statText}>
@@ -142,7 +150,7 @@ export default class Home extends Component{
                         </Text>
                     </Card>
                 </View>
-                <View style={styles.stat}>
+                {/* <View style={styles.stat}>
                     <Card containerStyle={styles.statCard}>
                         <Text style={styles.statText}>
                             <Ionicons size={30} name='md-airplane' /> {this.state.number_flights}
@@ -159,7 +167,7 @@ export default class Home extends Component{
                             Ciudades
                         </Text>
                     </Card>
-                </View>
+                </View> */}
                 <Text style={styles.nextTrips}>Siguientes 7 viajes</Text>
                 {
                     this.state.nextTrips.map((item, i) => (
@@ -193,7 +201,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     containerList: {
-        backgroundColor: '#298ad9',
+        backgroundColor: '#0275D8',
         marginLeft: '4%',
         marginRight: '4%',
         marginTop: '2%',
@@ -210,10 +218,10 @@ const styles = StyleSheet.create({
         fontSize: hp('1.5%')
     },
     buttonLogout: {
-        backgroundColor: '#298ad9',
+        backgroundColor: '#D9534F',
         width: wp('20%'),
         height: hp('5%'),
-        borderRadius: 20,
+        borderRadius: 10,
         position: 'absolute',
         right: wp('4%'),
         top: hp('4%'),
@@ -227,7 +235,7 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     titleStats: {
-        marginTop: hp('1%'),
+        marginTop: hp('2%'),
         marginBottom: hp('1%'),
         textAlign: 'center',
         fontSize: hp('2.5%')
@@ -272,6 +280,33 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'black',
         fontWeight: 'bold',
-        fontSize: hp('2%')
+        fontSize: hp('1.5%')
+    },
+    cardButtonStats: {
+        backgroundColor: '#5CB85C',
+        width: wp('40%'),
+        height: hp('7%'),
+        justifyContent: 'center',
+        borderRadius: 10
+    },
+    cardButtonMyTrips: {
+        backgroundColor: '#0275D8',
+        width: wp('40%'),
+        height: hp('7%'),
+        justifyContent: 'center',
+        borderRadius: 10
+    },
+    cardButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: hp('2%'),
+        marginLeft: wp('3%'),
+        marginRight: wp('3%')
+    },
+    cardButtonText: {
+        fontSize: hp('2%'),
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'center'
     }
 })
