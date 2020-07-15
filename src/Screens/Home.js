@@ -64,7 +64,7 @@ export default class Home extends Component{
                                     'destination': trip.destination,
                                     'start_date': trip.start_date,
                                     'end_date': trip.end_date,
-                                    'trip_id': trip.id,
+                                    'id': trip.id,
                                     'type': 'actual',
                                     'color': '#2988BC'
                                 }
@@ -76,7 +76,7 @@ export default class Home extends Component{
                                     'destination': trip.destination,
                                     'start_date': trip.start_date,
                                     'end_date': trip.end_date,
-                                    'trip_id': trip.id,
+                                    'id': trip.id,
                                     'type': 'next',
                                     'color': '#2F496E'
                                 }
@@ -120,14 +120,9 @@ export default class Home extends Component{
             .catch(error => console.log(error))
     }
 
-    goTo(e, view){
+    goTo(e, view, data){
         const { navigate } = this.props.navigation;
-        navigate(view, {userData: this.state.userData})
-    }
-
-    goDetails(e){
-        e.preventDefault();
-        alert("Hello World")
+        navigate(view, {userData: this.state.userData, tripID: data})
     }
 
     render(){
@@ -178,7 +173,7 @@ export default class Home extends Component{
                             subtitleStyle={styles.subtitleStyle}
                             containerStyle={[styles.containerList, {backgroundColor: item.color}]}
                             contentContainerStyle={{marginLeft: '5%'}}
-                            onPress={(e)=> this.goDetails(e)}
+                            onPress={(e)=> this.goTo(e, 'Trip Details', item.id)}
                         />
                     ))
                 }

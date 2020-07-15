@@ -3,12 +3,12 @@ import axios from 'axios';
 import moment from 'moment';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from 'react-native';
-import { Card, ListItem, Divider } from 'react-native-elements';
+import { ListItem, Divider } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default class extends Component{
+export default class MyTrips extends Component{
     constructor(props){
         super(props)
         this.state={
@@ -50,7 +50,7 @@ export default class extends Component{
                                     'destination': trip.destination,
                                     'start_date': trip.start_date,
                                     'end_date': trip.end_date,
-                                    'trip_id': trip.id,
+                                    'id': trip.id,
                                     'type': 'actual',
                                     'color': '#2988BC'
                                 }
@@ -62,7 +62,7 @@ export default class extends Component{
                                     'destination': trip.destination,
                                     'start_date': trip.start_date,
                                     'end_date': trip.end_date,
-                                    'trip_id': trip.id,
+                                    'id': trip.id,
                                     'type': 'actual',
                                     'color': '#2F496E'
                                 }
@@ -84,9 +84,9 @@ export default class extends Component{
         alert("Hello World")
     }
 
-    goTo(e, view){
+    goTo(e, view, data){
         const { navigate } = this.props.navigation;
-        navigate(view, {userData: this.state.userData})
+        navigate(view, {userData: this.state.userData, tripID: data})
     }
 
     render(){
@@ -112,7 +112,7 @@ export default class extends Component{
                             subtitleStyle={styles.subtitleStyle}
                             containerStyle={[styles.containerList, {backgroundColor: item.color}]}
                             contentContainerStyle={{marginLeft: '5%'}}
-                            onPress={(e)=> this.goDetails(e)}
+                            onPress={(e)=> this.goTo(e, 'Trip Details', item.id)}
                         />
                     ))
                 }
