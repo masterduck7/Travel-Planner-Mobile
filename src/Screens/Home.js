@@ -58,13 +58,27 @@ export default class Home extends Component{
                     let total_hotels = 0
                     let total_flights = 0
                     res.data.forEach(trip => {
+                        if (moment().isBetween(trip.start_date, trip.end_date)) {
+                            nextTrips.push(
+                                {
+                                    'destination': trip.destination,
+                                    'start_date': trip.start_date,
+                                    'end_date': trip.end_date,
+                                    'trip_id': trip.id,
+                                    'type': 'actual',
+                                    'color': '#2988BC'
+                                }
+                            )
+                        }
                         if ( ((moment(trip.start_date).fromNow()).includes("in") || (moment(trip.start_date).fromNow()).includes("en")) && nextTrips.length < 7 ) {
                             nextTrips.push(
                                 {
                                     'destination': trip.destination,
                                     'start_date': trip.start_date,
                                     'end_date': trip.end_date,
-                                    'trip_id': trip.id
+                                    'trip_id': trip.id,
+                                    'type': 'next',
+                                    'color': '#2F496E'
                                 }
                             )
                         }
@@ -131,7 +145,7 @@ export default class Home extends Component{
                         <Text style={styles.cardButtonText}>Estadisticas</Text>
                     </TouchableScale>
                 </View>
-                    <Text style={styles.titleStats}>Progreso año actual</Text>
+                    <Text style={styles.titleStats}>Progreso {moment().format('YYYY')}</Text>
                 <View style={styles.stat}>
                     <Card containerStyle={styles.statCard}>
                         <Text style={styles.statText}>
@@ -150,24 +164,6 @@ export default class Home extends Component{
                         </Text>
                     </Card>
                 </View>
-                {/* <View style={styles.stat}>
-                    <Card containerStyle={styles.statCard}>
-                        <Text style={styles.statText}>
-                            <Ionicons size={30} name='md-airplane' /> {this.state.number_flights}
-                        </Text>
-                        <Text style={styles.statTextSub}>
-                            Vuelos
-                        </Text>
-                    </Card>
-                    <Card containerStyle={styles.statCard}>
-                        <Text style={styles.statText}>
-                            <Ionicons size={30} name='md-business' /> {this.state.number_cities}
-                        </Text>
-                        <Text style={styles.statTextSub}>
-                            Ciudades
-                        </Text>
-                    </Card>
-                </View> */}
                 <Text style={styles.nextTrips}>Siguientes 7 viajes</Text>
                 {
                     this.state.nextTrips.map((item, i) => (
@@ -180,7 +176,7 @@ export default class Home extends Component{
                             subtitle= {moment(item.start_date).format('DD/MM/YYYY').concat(" - ", moment(item.end_date).format('DD/MM/YYYY'))}
                             titleStyle={styles.titleStyle}
                             subtitleStyle={styles.subtitleStyle}
-                            containerStyle={styles.containerList}
+                            containerStyle={[styles.containerList, {backgroundColor: item.color}]}
                             contentContainerStyle={{marginLeft: '5%'}}
                             onPress={(e)=> this.goDetails(e)}
                         />
@@ -201,7 +197,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     containerList: {
-        backgroundColor: '#0275D8',
         marginLeft: '4%',
         marginRight: '4%',
         marginTop: '2%',
@@ -218,7 +213,7 @@ const styles = StyleSheet.create({
         fontSize: hp('1.5%')
     },
     buttonLogout: {
-        backgroundColor: '#D9534F',
+        backgroundColor: '#ED8C72',
         width: wp('20%'),
         height: hp('5%'),
         borderRadius: 10,
@@ -226,10 +221,10 @@ const styles = StyleSheet.create({
         right: wp('4%'),
         top: hp('4%'),
         marginBottom: hp('-5%'),
-        padding: 10
+        padding: 8
     },
     buttonText: {
-        fontSize: hp('1.7%'),
+        fontSize: hp('2%'),
         fontWeight: 'bold',
         color: 'white',
         textAlign: 'center'
@@ -283,14 +278,14 @@ const styles = StyleSheet.create({
         fontSize: hp('1.5%')
     },
     cardButtonStats: {
-        backgroundColor: '#5CB85C',
+        backgroundColor: '#000B29',
         width: wp('40%'),
         height: hp('7%'),
         justifyContent: 'center',
         borderRadius: 10
     },
     cardButtonMyTrips: {
-        backgroundColor: '#0275D8',
+        backgroundColor: '#000B29',
         width: wp('40%'),
         height: hp('7%'),
         justifyContent: 'center',
