@@ -120,9 +120,9 @@ export default class Home extends Component{
             .catch(error => console.log(error))
     }
 
-    logout(e){
+    goTo(e, view){
         const { navigate } = this.props.navigation;
-        navigate('Login')
+        navigate(view, {userData: this.state.userData})
     }
 
     goDetails(e){
@@ -133,26 +133,26 @@ export default class Home extends Component{
     render(){
         return(
             <ScrollView style={styles.viewHome}>
-                <Text style={styles.hello}>Hola {this.state.userData.userLogged}</Text>
-                <TouchableScale style={styles.buttonLogout} friction={90} tension={100} onPress={(e) => this.logout(e)}>
+                <Text style={styles.hello}>Hello {this.state.userData.userLogged}</Text>
+                <TouchableScale style={styles.buttonLogout} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Login')}>
                     <Text style={styles.buttonText}>Logout</Text>
                 </TouchableScale>
                 <View style={styles.cardButtonContainer}>
-                    <TouchableScale style={styles.cardButtonMyTrips} friction={90} tension={100} onPress={(e) => this.goDetails(e)}>
-                        <Text style={styles.cardButtonText}>Mis viajes</Text>
+                    <TouchableScale style={styles.cardButtonMyTrips} friction={90} tension={100} onPress={(e) => this.goTo(e, 'My Trips')}>
+                        <Text style={styles.cardButtonText}>My Trips</Text>
                     </TouchableScale>
-                    <TouchableScale style={styles.cardButtonStats} friction={90} tension={100} onPress={(e) => this.goDetails(e)}>
-                        <Text style={styles.cardButtonText}>Estadisticas</Text>
+                    <TouchableScale style={styles.cardButtonStats} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Statistics')}>
+                        <Text style={styles.cardButtonText}>Statistics</Text>
                     </TouchableScale>
                 </View>
-                    <Text style={styles.titleStats}>Progreso {moment().format('YYYY')}</Text>
+                    <Text style={styles.titleStats}>Progress {moment().format('YYYY')}</Text>
                 <View style={styles.stat}>
                     <Card containerStyle={styles.statCard}>
                         <Text style={styles.statText}>
                             <Ionicons size={30} name='md-card' /> {this.state.totalYear}
                         </Text>
                         <Text style={styles.statTextSub}>
-                            Gastos
+                            Costs
                         </Text>
                     </Card>
                     <Card containerStyle={styles.statCard}>
@@ -160,11 +160,11 @@ export default class Home extends Component{
                             <Ionicons size={30} name='md-briefcase' /> {this.state.number_trips}
                         </Text>
                         <Text style={styles.statTextSub}>
-                            Viajes
+                            Trips
                         </Text>
                     </Card>
                 </View>
-                <Text style={styles.nextTrips}>Siguientes 7 viajes</Text>
+                <Text style={styles.nextTrips}>7 next trips</Text>
                 {
                     this.state.nextTrips.map((item, i) => (
                         <ListItem
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
         marginLeft: '4%',
         marginRight: '4%',
         marginTop: '2%',
-        borderRadius: 30,
+        borderRadius: 20,
         borderWidth: 0
     },
     titleStyle: {
