@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from 'react-native';
 import { Card, ListItem, Divider } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
@@ -67,8 +67,22 @@ export default class TripDetails extends Component{
             <ScrollView style={styles.viewHome}>
                 <Text style={styles.titleMain}>{this.state.tripData.destination}</Text>
                 <TouchableScale style={styles.buttonBack} friction={90} tension={100} onPress={(e) => this.goTo(e, 'My Trips')}>
-                    <Ionicons style={styles.buttonBackIcon} name="md-arrow-round-back" size={20} color="white" />
+                    <Ionicons name="md-arrow-round-back" size={20} color="white" />
                 </TouchableScale>
+                <View style={styles.cardButtonContainer}>
+                    <TouchableScale style={styles.cardButton} friction={90} tension={100} onPress={(e) => this.goTo(e, 'My Trips')}>
+                        <FontAwesome5 name="plane" size={30} color="white" />
+                    </TouchableScale>
+                    <TouchableScale style={styles.cardButton} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Statistics')}>
+                        <FontAwesome5 name="city" size={30} color="white" />
+                    </TouchableScale>
+                    <TouchableScale style={styles.cardButton} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Statistics')}>
+                        <FontAwesome name="hotel" size={30} color="white" />
+                    </TouchableScale>
+                    <TouchableScale style={styles.cardButton} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Statistics')}>
+                        <FontAwesome name="credit-card" size={30} color="white" />
+                    </TouchableScale>
+                </View>
                 <Divider style={{marginTop: hp('2%')}} />
                 <View style={styles.footer}>
                     <Text style={styles.footerText}>By LPSoftware</Text>
@@ -152,4 +166,20 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: hp('1.5%')
     },
+    cardButton: {
+        backgroundColor: '#000B29',
+        width: wp('20%'),
+        height: hp('7%'),
+        borderRadius: 10,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    cardButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginTop: hp('2%'),
+        marginLeft: wp('3%'),
+        marginRight: wp('3%')
+    }
 });

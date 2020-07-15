@@ -94,10 +94,10 @@ export default class MyTrips extends Component{
             <ScrollView style={styles.viewHome}>
                 <Text style={styles.titleMain}>My Trips</Text>
                 <TouchableScale style={styles.buttonBack} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
-                    <Ionicons style={styles.buttonBackIcon} name="md-arrow-round-back" size={20} color="white" />
+                    <Ionicons name="md-arrow-round-back" size={20} color="white" />
                 </TouchableScale>
                 <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
-                    <Ionicons style={styles.buttonBackIcon} name="ios-add" size={20} color="white" />
+                    <Ionicons name="ios-add" size={20} color="white" />
                 </TouchableScale>
                 {
                     this.state.trips.map((item, i) => (
