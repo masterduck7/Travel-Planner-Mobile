@@ -3,7 +3,7 @@ import axios from 'axios';
 import moment from 'moment';
 import { Ionicons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from 'react-native';
-import { Card, ListItem, Divider } from 'react-native-elements';
+import { ListItem, Divider } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -15,6 +15,9 @@ export default class TripDetails extends Component{
             tripData: {},
             flights: [],
             cities: [],
+            hotels: [],
+            costs: [],
+            activities: [],
             userData: {},
             selectedTab: 'cities',
             tripID: null
@@ -22,21 +25,13 @@ export default class TripDetails extends Component{
     }
 
     componentDidMount(){
-        this.setState({
-            userData: this.props.route.params.userData,
-            tripID: this.props.route.params.tripID
-        })
-        this.getData(this.props.route.params.userData, this.props.route.params.tripID)
-    }
-
-    componentWillUnmount(){
-        this.setState({
-            userData: {},
-            tripData: {},
-            flights: [],
-            cities: [],
-            tripID: null
-        })
+        this.props.navigation.addListener('focus', () => {
+            this.setState({
+                userData: this.props.route.params.userData,
+                tripID: this.props.route.params.tripID
+            })
+            this.getData(this.props.route.params.userData, this.props.route.params.tripID)
+        });
     }
 
     getData(data, tripID){
@@ -46,10 +41,27 @@ export default class TripDetails extends Component{
             }})
             .then(res => {
                 if (!res.data["Error"]) {
+                    var hotels = []
+                    var costs = []
+                    var activities = []
+                    res.data.cities.forEach(city => {
+                        city.hotels.forEach(hotel => {
+                            hotels.push(hotel)
+                        });
+                        city.activities.forEach(activity => {
+                            activities.push(activity)
+                        });
+                        city.citycosts.forEach(cost => {
+                            costs.push(cost)
+                        });
+                    });
                     this.setState({
                         tripData: res.data,
                         cities: res.data.cities,
-                        flights: res.data.flights
+                        flights: res.data.flights,
+                        hotels: hotels,
+                        costs: costs,
+                        activities: activities
                     })
                 }else{
                     console.log("Error in Get Trip detail")
@@ -58,13 +70,13 @@ export default class TripDetails extends Component{
             .catch(error => console.log(error))
     }
 
-    selectTab(value){
-        this.setState({selectedTab: value})
+    goTo(e, view, data){
+        const { navigate } = this.props.navigation;
+        navigate(view, {userData: this.state.userData, userData: data})
     }
 
-    goTo(e, view){
-        const { navigate } = this.props.navigation;
-        navigate(view, {userData: this.state.userData})
+    selectTab(value){
+        this.setState({selectedTab: value})
     }
 
     renderElement(){
@@ -72,6 +84,9 @@ export default class TripDetails extends Component{
             return(
                 <View>
                     <Text style={styles.titleSub}>Cities</Text>
+                    <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
+                        <Ionicons name="ios-add" size={20} color="white" />
+                    </TouchableScale>
                     {
                         this.state.cities.map((item, i) => (
                             <ListItem
@@ -94,6 +109,9 @@ export default class TripDetails extends Component{
             return(
                 <View>
                     <Text style={styles.titleSub}>Flights</Text>
+                    <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
+                        <Ionicons name="ios-add" size={20} color="white" />
+                    </TouchableScale>
                     {
                         this.state.flights.map((item, i) => (
                             <ListItem
@@ -118,16 +136,46 @@ export default class TripDetails extends Component{
             return(
                 <View>
                     <Text style={styles.titleSub}>Hotels</Text>
+                    <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
+                        <Ionicons name="ios-add" size={20} color="white" />
+                    </TouchableScale>
                     {
-                        this.state.flights.map((item, i) => (
+                        this.state.hotels.map((item, i) => (
                             <ListItem
                                 key={i}
                                 Component={TouchableScale}
                                 friction={90}
                                 tension={100}
-                                title={item.origin + " - " + item.destination}
+                                title={item.name}
                                 titleStyle={styles.titleStyle}
                                 subtitle= {moment(item.start_date).format('DD/MM/YYYY').concat(" - ", moment(item.end_date).format('DD/MM/YYYY'))}
+                                subtitleStyle={styles.subtitleStyle}
+                                containerStyle={[styles.containerList, {backgroundColor: '#2F496E'}]}
+                                contentContainerStyle={{marginLeft: '5%'}}
+                                onPress={(e)=> this.goTo(e, 'Trip Details', item.id)}
+                            />
+                        ))
+                    }
+                </View>
+            )
+        }
+        else if (this.state.selectedTab === 'activities'){
+            return(
+                <View>
+                    <Text style={styles.titleSub}>Activities</Text>
+                    <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
+                        <Ionicons name="ios-add" size={20} color="white" />
+                    </TouchableScale>
+                    {
+                        this.state.activities.map((item, i) => (
+                            <ListItem
+                                key={i}
+                                Component={TouchableScale}
+                                friction={90}
+                                tension={100}
+                                title={item.name}
+                                titleStyle={styles.titleStyle}
+                                subtitle= {moment(item.activity_date).format('DD/MM/YYYY')  + " (" + item.badge_total_price + " " + item.total_price + " )"}
                                 subtitleStyle={styles.subtitleStyle}
                                 containerStyle={[styles.containerList, {backgroundColor: '#2F496E'}]}
                                 contentContainerStyle={{marginLeft: '5%'}}
@@ -142,16 +190,19 @@ export default class TripDetails extends Component{
             return(
                 <View>
                     <Text style={styles.titleSub}>Costs</Text>
+                    <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
+                        <Ionicons name="ios-add" size={20} color="white" />
+                    </TouchableScale>
                     {
-                        this.state.flights.map((item, i) => (
+                        this.state.costs.map((item, i) => (
                             <ListItem
                                 key={i}
                                 Component={TouchableScale}
                                 friction={90}
                                 tension={100}
-                                title={item.origin + " - " + item.destination}
+                                title={item.name}
                                 titleStyle={styles.titleStyle}
-                                subtitle= {moment(item.start_date).format('DD/MM/YYYY').concat(" - ", moment(item.end_date).format('DD/MM/YYYY'))}
+                                subtitle= {item.badge_total_price + " " + item.total_price}
                                 subtitleStyle={styles.subtitleStyle}
                                 containerStyle={[styles.containerList, {backgroundColor: '#2F496E'}]}
                                 contentContainerStyle={{marginLeft: '5%'}}
@@ -175,7 +226,7 @@ export default class TripDetails extends Component{
         return(
             <ScrollView style={styles.viewHome}>
                 <Text style={styles.titleMain}>{this.state.tripData.destination}</Text>
-                <TouchableScale style={styles.buttonBack} friction={90} tension={100} onPress={(e) => this.goTo(e, 'My Trips')}>
+                <TouchableScale style={styles.buttonBack} friction={90} tension={100} onPress={(e) => this.goTo(e, 'My Trips', this.state.userData )}>
                     <Ionicons name="md-arrow-round-back" size={20} color="white" />
                 </TouchableScale>
                 <View style={styles.cardButtonContainer}>
@@ -187,6 +238,9 @@ export default class TripDetails extends Component{
                     </TouchableScale>
                     <TouchableScale style={styles.cardButton} friction={90} tension={100} onPress={(e) => this.selectTab('hotels')}>
                         <FontAwesome name="hotel" size={30} color="white" />
+                    </TouchableScale>
+                    <TouchableScale style={styles.cardButton} friction={90} tension={100} onPress={(e) => this.selectTab('activities')}>
+                        <FontAwesome5 name="skiing" size={30} color="white" />
                     </TouchableScale>
                     <TouchableScale style={styles.cardButton} friction={90} tension={100} onPress={(e) => this.selectTab('costs')}>
                         <FontAwesome name="credit-card" size={30} color="white" />
@@ -264,7 +318,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: wp('4%'),
         top: hp('3%'),
-        marginBottom: hp('-5%'),
         padding: 8,
         flex: 1,
         flexDirection: 'row',
@@ -283,7 +336,7 @@ const styles = StyleSheet.create({
     },
     cardButton: {
         backgroundColor: '#000B29',
-        width: wp('20%'),
+        width: wp('15%'),
         height: hp('7%'),
         borderRadius: 10,
         alignItems: 'center',
@@ -293,7 +346,7 @@ const styles = StyleSheet.create({
     cardButtonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginTop: hp('2%'),
+        marginTop: hp('4%'),
         marginLeft: wp('3%'),
         marginRight: wp('3%')
     }
