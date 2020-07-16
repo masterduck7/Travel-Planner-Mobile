@@ -140,7 +140,7 @@ export default class Home extends Component{
                         <Text style={styles.cardButtonText}>Statistics</Text>
                     </TouchableScale>
                 </View>
-                    <Text style={styles.titleStats}>Progress {moment().format('YYYY')}</Text>
+                <Text style={styles.titleStats}>Progress {moment().format('YYYY')}</Text>
                 <View style={styles.stat}>
                     <Card containerStyle={styles.statCard}>
                         <Text style={styles.statText}>
