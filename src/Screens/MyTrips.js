@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
         fontSize: hp('1.5%')
     },
     titleMain: {
-        marginTop: hp('4%'),
+        marginTop: hp('5%'),
         marginBottom: hp('2%'),
         textAlign: 'center',
         fontWeight: 'bold',
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         position: 'absolute',
         left: wp('4%'),
-        top: hp('3%'),
+        top: hp('5%'),
         marginBottom: hp('-5%'),
         padding: 8,
         flex: 1,
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         position: 'absolute',
         right: wp('4%'),
-        top: hp('3%'),
+        top: hp('5%'),
         marginBottom: hp('-5%'),
         padding: 8,
         flex: 1,
