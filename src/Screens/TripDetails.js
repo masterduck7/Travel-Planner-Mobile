@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { Ionicons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, Text, View } from 'react-native';
-import { ListItem, Divider } from 'react-native-elements';
+import { Modal, StyleSheet, Text, View } from 'react-native';
+import { Card, Input, Divider, ListItem } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -20,7 +20,8 @@ export default class TripDetails extends Component{
             activities: [],
             userData: {},
             selectedTab: 'cities',
-            tripID: null
+            tripID: null,
+            modalAddCost: false
         }
     }
 
@@ -190,7 +191,7 @@ export default class TripDetails extends Component{
             return(
                 <View>
                     <Text style={styles.titleSub}>Costs</Text>
-                    <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
+                    <TouchableScale style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.setState({modalAddCost: true})}>
                         <Ionicons name="ios-add" size={20} color="white" />
                     </TouchableScale>
                     {
@@ -225,6 +226,49 @@ export default class TripDetails extends Component{
     render(){
         return(
             <ScrollView style={styles.viewHome}>
+                {/* Costs modal */}
+                <Modal
+                    visible={this.state.modalAddCost}
+                    transparent={true}
+                    animationType = {"slide"}
+                    onRequestClose={() => this.setState({modalAddCost: false})}
+                >
+                    <View style={styles.modal}>
+                        <Text style={styles.modalTitle}>Add Cost</Text>
+                        <Card containerStyle={styles.inputModal}>
+                            <Input
+                                inputStyle={{width: '50%'}}
+                                inputContainerStyle={styles.textLogin}
+                                placeholderTextColor="gray"
+                                placeholder='City'
+                            />
+                        </Card>
+                        <Card containerStyle={styles.inputModal}>
+                            <Input
+                                inputStyle={{width: '50%'}}
+                                inputContainerStyle={styles.textLogin}
+                                placeholderTextColor="gray"
+                                placeholder='Name'
+                            />
+                        </Card>
+                        <Card containerStyle={styles.inputModal}>
+                            <Input
+                                inputStyle={{width: '50%'}}
+                                inputContainerStyle={styles.textLogin}
+                                placeholderTextColor="gray"
+                                placeholder='Total price (USD)'
+                            />
+                        </Card>
+                        <View style={styles.buttonContainer}>
+                            <TouchableScale style={styles.buttonConfirm} friction={90} tension={100} onPress={(e) => this.goTo(e, 'My Trips', this.state.userData )}>
+                                <Text style={styles.buttonText}>Save</Text>
+                            </TouchableScale>
+                            <TouchableScale style={{...styles.buttonConfirm, backgroundColor: '#ED8C72', marginLeft: wp('3%')}} friction={90} tension={100} onPress={(e) => this.setState({modalAddCost: false})}>
+                                <Text style={styles.buttonText}>Cancel</Text>
+                            </TouchableScale>
+                        </View>
+                    </View>
+                </Modal>
                 <Text style={styles.titleMain}>{this.state.tripData.destination}</Text>
                 <TouchableScale style={styles.buttonBack} friction={90} tension={100} onPress={(e) => this.goTo(e, 'My Trips', this.state.userData )}>
                     <Ionicons name="md-arrow-round-back" size={20} color="white" />
@@ -297,7 +341,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         position: 'absolute',
         left: wp('4%'),
-        top: hp('3%'),
+        top: hp('4%'),
         marginBottom: hp('-5%'),
         padding: 8,
         flex: 1,
@@ -349,5 +393,46 @@ const styles = StyleSheet.create({
         marginTop: hp('4%'),
         marginLeft: wp('3%'),
         marginRight: wp('3%')
+    },
+    modal: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#B9C4C9',
+        borderRadius: 10,
+        marginTop: hp("30%"),
+        height: '40%',
+        width: wp('80%'),
+        margin: wp("10%")
+    },
+    textLogin: {
+        borderBottomWidth: 0,
+        marginTop: hp('-2%')
+    },
+    modalTitle: {
+        marginTop: hp('4%'),
+        marginBottom: hp('2%'),
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: hp('2.5%')
+    },
+    inputModal: {
+        width: wp('70%'),
+        height: hp('5%'),
+        borderRadius: 10,
+        borderWidth: 2
+    },
+    buttonConfirm: {
+        justifyContent: 'center',
+        marginTop: hp('2%'),
+        marginBottom: hp('4%'),
+        borderRadius: 10,
+        backgroundColor: '#2F496E',
+        width: wp('30%'),
+        height: hp('4%')
+    },
+    buttonContainer:{
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'space-between'
     }
 });
