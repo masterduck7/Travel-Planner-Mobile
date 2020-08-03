@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { Ionicons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
-import { Modal, StyleSheet, Text, View } from 'react-native';
+import { Modal, Picker, StyleSheet, Text, View } from 'react-native';
 import { Card, Input, Divider, ListItem } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -12,6 +12,8 @@ export default class TripDetails extends Component{
     constructor(props){
         super(props)
         this.state={
+            selectedCity: '',
+            cityList: {},
             tripData: {},
             flights: [],
             cities: [],
@@ -45,7 +47,9 @@ export default class TripDetails extends Component{
                     var hotels = []
                     var costs = []
                     var activities = []
+                    var cities = {}
                     res.data.cities.forEach(city => {
+                        cities[city.name] = city.id
                         city.hotels.forEach(hotel => {
                             hotels.push(hotel)
                         });
@@ -57,6 +61,7 @@ export default class TripDetails extends Component{
                         });
                     });
                     this.setState({
+                        cityList: cities,
                         tripData: res.data,
                         cities: res.data.cities,
                         flights: res.data.flights,
@@ -224,6 +229,9 @@ export default class TripDetails extends Component{
     }
 
     render(){
+        let myCities = Object.entries(this.state.cityList).map(([key, value]) => {
+            return <Picker.Item label={key} value={key} key={value}/>
+        });
         return(
             <ScrollView style={styles.viewHome}>
                 {/* Costs modal */}
@@ -235,14 +243,9 @@ export default class TripDetails extends Component{
                 >
                     <View style={styles.modal}>
                         <Text style={styles.modalTitle}>Add Cost</Text>
-                        <Card containerStyle={styles.inputModal}>
-                            <Input
-                                inputStyle={{width: '50%'}}
-                                inputContainerStyle={styles.textLogin}
-                                placeholderTextColor="gray"
-                                placeholder='City'
-                            />
-                        </Card>
+                        <Picker itemStyle={styles.pickerItem} style={styles.picker} selectedValue={this.state.selectedCity} onValueChange={(value)=>this.setState({selectedCity:value})} >
+                            {myCities}
+                        </Picker>
                         <Card containerStyle={styles.inputModal}>
                             <Input
                                 inputStyle={{width: '50%'}}
@@ -431,8 +434,18 @@ const styles = StyleSheet.create({
         height: hp('4%')
     },
     buttonContainer:{
-      flex: 1,
-      flexDirection: 'row',
-      justifyContent: 'space-between'
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    picker: {
+        width: wp('70%'),
+        height: hp('5%'),
+        borderRadius: 10,
+        borderColor: 'white',
+        backgroundColor: 'white'
+    },
+    pickerItem: {
+        
     }
 });
