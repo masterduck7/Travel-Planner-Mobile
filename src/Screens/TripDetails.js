@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { Ionicons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
-import { Modal, Picker, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, Picker, StyleSheet, Text, View } from 'react-native';
 import { Card, Input, Divider, ListItem } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
+
 
 export default class TripDetails extends Component{
     constructor(props){
@@ -241,6 +242,7 @@ export default class TripDetails extends Component{
                     animationType = {"slide"}
                     onRequestClose={() => this.setState({modalAddCost: false})}
                 >
+                    <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={hp('8%')}>
                     <View style={styles.modal}>
                         <Text style={styles.modalTitle}>Add Cost</Text>
                         <Picker itemStyle={styles.pickerItem} style={styles.picker} selectedValue={this.state.selectedCity} onValueChange={(value)=>this.setState({selectedCity:value})} >
@@ -271,6 +273,7 @@ export default class TripDetails extends Component{
                             </TouchableScale>
                         </View>
                     </View>
+                    </KeyboardAvoidingView>
                 </Modal>
                 <Text style={styles.titleMain}>{this.state.tripData.destination}</Text>
                 <TouchableScale style={styles.buttonBack} friction={90} tension={100} onPress={(e) => this.goTo(e, 'My Trips', this.state.userData )}>
@@ -403,7 +406,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#B9C4C9',
         borderRadius: 10,
         marginTop: hp("30%"),
-        height: '40%',
+        height: hp('35%'),
         width: wp('80%'),
         margin: wp("10%")
     },
@@ -412,7 +415,7 @@ const styles = StyleSheet.create({
         marginTop: hp('-2%')
     },
     modalTitle: {
-        marginTop: hp('4%'),
+        marginTop: hp('2%'),
         marginBottom: hp('2%'),
         textAlign: 'center',
         fontWeight: 'bold',
