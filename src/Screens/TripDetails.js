@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { Ionicons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
-import { KeyboardAvoidingView, Modal, Picker, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, StyleSheet, Text, View } from 'react-native';
 import { Card, Input, Divider, ListItem } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
+import Menu, { MenuItem } from 'react-native-material-menu';
 
 
 export default class TripDetails extends Component{
@@ -24,7 +25,8 @@ export default class TripDetails extends Component{
             selectedTab: 'cities',
             tripID: null,
             modalAddCost: false,
-            selectedCity: '',
+            selectedCity: 'Select City',
+            selectedCityKey: '',
             nameCost: '',
             priceCost: ''
         }
@@ -79,9 +81,13 @@ export default class TripDetails extends Component{
             .catch(error => console.log(error))
     }
 
-    goTo(e, view, data){
+    goTo(e, view, data, type){
         const { navigate } = this.props.navigation;
-        navigate(view, {userData: this.state.userData, userData: data})
+        if (type != null){
+            navigate(view, {userData: this.state.userData, type: data})
+        }else{
+            navigate(view, {userData: this.state.userData, userData: data})
+        }
     }
 
     selectTab(value){
@@ -232,28 +238,43 @@ export default class TripDetails extends Component{
     }
 
     postCost(){
-        alert(this.state.selectedCity)
         var postObj = {
-            cityID: this.state.selectedCity,
+            cityID: this.state.selectedCityKey,
             name: this.state.nameCost,
             total_price: this.state.priceCost,
             badge_total_price: 'USD'
         }
-        // axios.post(`https://travelplanner.lpsoftware.space/api/costs/`, postObj, {
-        //     headers: {
-        //       'Authorization': `Bearer ${this.state.userData.accessToken}`
-        //     }})
-        //     .then(res => {
-        //         this.goTo(e, 'Trip Details', this.state.userData)
-        //     })
-        //     .catch(function (error) {
-        //         console.log("Error in add cost");
-        //     });
+        axios.post(`https://travelplanner.lpsoftware.space/api/costs/`, postObj, {
+            headers: {
+              'Authorization': `Bearer ${this.state.userData.accessToken}`
+            }})
+            .then(e => {
+                this.setState({modalAddCost: false, selectedCity: 'Select City', nameCost: '', priceCost: '', selectedCityKey: ''})
+                this.goTo(e, 'Trip Details', this.state.tripID, 'tripID')
+            })
+            .catch(function (error) {
+                console.log("Error in add cost");
+            });
     }
+
+    setMenuRef = ref => {
+        this._menu = ref;
+    };
+     
+    hideMenu = (key,value) => {
+        this._menu.hide();
+        this.setState({selectedCity: key, selectedCityKey: value})
+    };
+     
+    showMenu = () => {
+        this._menu.show();
+    };
 
     render(){
         let myCities = Object.entries(this.state.cityList).map(([key, value]) => {
-            return <Picker.Item label={key} value={key} key={value}/>
+            return  <MenuItem key={value} onPress={(e) => this.hideMenu(key,value)}>
+                        {key}
+                    </MenuItem>
         });
         return(
             <ScrollView style={styles.viewHome}>
@@ -267,9 +288,16 @@ export default class TripDetails extends Component{
                     <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={hp('8%')}>
                     <View style={styles.modal}>
                         <Text style={styles.modalTitle}>Add Cost</Text>
-                        <Picker mode='dropdown' itemStyle={styles.pickerItem} style={styles.picker} selectedValue={this.state.selectedCity} onValueChange={(itemValue, itemIndex) => this.setState({selectedCity: itemValue})} >
+                        <Menu
+                            ref={this.setMenuRef}
+                            button={
+                                <TouchableScale friction={90} tension={100} onPress={(e) =>  this.showMenu()} style={styles.dropdown}>
+                                    <Text style={styles.dropdownText}>{this.state.selectedCity}</Text>
+                                </TouchableScale>
+                            }
+                        >
                             {myCities}
-                        </Picker>
+                        </Menu>
                         <Card containerStyle={styles.inputModal}>
                             <Input
                                 inputStyle={{width: '50%'}}
@@ -451,7 +479,8 @@ const styles = StyleSheet.create({
         width: wp('70%'),
         height: hp('5%'),
         borderRadius: 10,
-        borderWidth: 2
+        borderWidth: 2,
+        borderColor: 'white'
     },
     buttonConfirm: {
         justifyContent: 'center',
@@ -467,14 +496,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
-    picker: {
+    dropdown: {
+        backgroundColor: 'white',
+        padding: hp('1%'),
         width: wp('70%'),
         height: hp('5%'),
         borderRadius: 10,
-        borderColor: 'white',
-        backgroundColor: 'white'
+        borderWidth: 2,
+        borderColor: 'white'
     },
-    pickerItem: {
-        
+    dropdownText: {
+        left: wp('4%'),
+        color: 'gray',
+        fontSize: hp('2%')
     }
 });
