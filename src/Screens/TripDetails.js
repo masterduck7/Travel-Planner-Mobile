@@ -13,7 +13,6 @@ export default class TripDetails extends Component{
     constructor(props){
         super(props)
         this.state={
-            selectedCity: '',
             cityList: {},
             tripData: {},
             flights: [],
@@ -24,7 +23,10 @@ export default class TripDetails extends Component{
             userData: {},
             selectedTab: 'cities',
             tripID: null,
-            modalAddCost: false
+            modalAddCost: false,
+            selectedCity: '',
+            nameCost: '',
+            priceCost: ''
         }
     }
 
@@ -229,6 +231,26 @@ export default class TripDetails extends Component{
         }
     }
 
+    postCost(){
+        alert(this.state.selectedCity)
+        var postObj = {
+            cityID: this.state.selectedCity,
+            name: this.state.nameCost,
+            total_price: this.state.priceCost,
+            badge_total_price: 'USD'
+        }
+        // axios.post(`https://travelplanner.lpsoftware.space/api/costs/`, postObj, {
+        //     headers: {
+        //       'Authorization': `Bearer ${this.state.userData.accessToken}`
+        //     }})
+        //     .then(res => {
+        //         this.goTo(e, 'Trip Details', this.state.userData)
+        //     })
+        //     .catch(function (error) {
+        //         console.log("Error in add cost");
+        //     });
+    }
+
     render(){
         let myCities = Object.entries(this.state.cityList).map(([key, value]) => {
             return <Picker.Item label={key} value={key} key={value}/>
@@ -245,7 +267,7 @@ export default class TripDetails extends Component{
                     <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={hp('8%')}>
                     <View style={styles.modal}>
                         <Text style={styles.modalTitle}>Add Cost</Text>
-                        <Picker itemStyle={styles.pickerItem} style={styles.picker} selectedValue={this.state.selectedCity} onValueChange={(value)=>this.setState({selectedCity:value})} >
+                        <Picker mode='dropdown' itemStyle={styles.pickerItem} style={styles.picker} selectedValue={this.state.selectedCity} onValueChange={(itemValue, itemIndex) => this.setState({selectedCity: itemValue})} >
                             {myCities}
                         </Picker>
                         <Card containerStyle={styles.inputModal}>
@@ -254,6 +276,8 @@ export default class TripDetails extends Component{
                                 inputContainerStyle={styles.textLogin}
                                 placeholderTextColor="gray"
                                 placeholder='Name'
+                                value={this.state.nameCost}
+                                onChangeText={value => this.setState({nameCost: value})}
                             />
                         </Card>
                         <Card containerStyle={styles.inputModal}>
@@ -262,10 +286,12 @@ export default class TripDetails extends Component{
                                 inputContainerStyle={styles.textLogin}
                                 placeholderTextColor="gray"
                                 placeholder='Total price (USD)'
+                                value={this.state.priceCost}
+                                onChangeText={value => this.setState({priceCost: value})}
                             />
                         </Card>
                         <View style={styles.buttonContainer}>
-                            <TouchableScale style={styles.buttonConfirm} friction={90} tension={100} onPress={(e) => this.goTo(e, 'My Trips', this.state.userData )}>
+                            <TouchableScale style={styles.buttonConfirm} friction={90} tension={100} onPress={(e) => this.postCost()}>
                                 <Text style={styles.buttonText}>Save</Text>
                             </TouchableScale>
                             <TouchableScale style={{...styles.buttonConfirm, backgroundColor: '#ED8C72', marginLeft: wp('3%')}} friction={90} tension={100} onPress={(e) => this.setState({modalAddCost: false})}>
