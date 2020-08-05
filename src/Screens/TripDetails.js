@@ -8,6 +8,7 @@ import TouchableScale from 'react-native-touchable-scale';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 import Menu, { MenuItem } from 'react-native-material-menu';
+import Flag from 'react-native-flags';
 
 
 export default class TripDetails extends Component{
@@ -99,13 +100,11 @@ export default class TripDetails extends Component{
             return(
                 <View>
                     <Text style={styles.titleSub}>Cities</Text>
-                    <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
-                        <Ionicons name="ios-add" size={20} color="white" />
-                    </TouchableScale>
                     {
                         this.state.cities.map((item, i) => (
                             <ListItem
                                 key={i}
+                                leftAvatar={<Flag code={item.country} size={32} />}
                                 Component={TouchableScale}
                                 friction={90}
                                 tension={100}
@@ -124,9 +123,6 @@ export default class TripDetails extends Component{
             return(
                 <View>
                     <Text style={styles.titleSub}>Flights</Text>
-                    <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
-                        <Ionicons name="ios-add" size={20} color="white" />
-                    </TouchableScale>
                     {
                         this.state.flights.map((item, i) => (
                             <ListItem
@@ -151,9 +147,6 @@ export default class TripDetails extends Component{
             return(
                 <View>
                     <Text style={styles.titleSub}>Hotels</Text>
-                    <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
-                        <Ionicons name="ios-add" size={20} color="white" />
-                    </TouchableScale>
                     {
                         this.state.hotels.map((item, i) => (
                             <ListItem
@@ -178,9 +171,6 @@ export default class TripDetails extends Component{
             return(
                 <View>
                     <Text style={styles.titleSub}>Activities</Text>
-                    <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
-                        <Ionicons name="ios-add" size={20} color="white" />
-                    </TouchableScale>
                     {
                         this.state.activities.map((item, i) => (
                             <ListItem
