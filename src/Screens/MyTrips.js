@@ -2,13 +2,13 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, View } from 'react-native';
-import { Card, ListItem, Divider } from 'react-native-elements';
+import { StyleSheet, Text, View, Slider } from 'react-native';
+import { ListItem, Divider } from 'react-native-elements';
 import TouchableScale from 'react-native-touchable-scale';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default class extends Component{
+export default class MyTrips extends Component{
     constructor(props){
         super(props)
         this.state={
@@ -50,7 +50,7 @@ export default class extends Component{
                                     'destination': trip.destination,
                                     'start_date': trip.start_date,
                                     'end_date': trip.end_date,
-                                    'trip_id': trip.id,
+                                    'id': trip.id,
                                     'type': 'actual',
                                     'color': '#2988BC'
                                 }
@@ -62,7 +62,7 @@ export default class extends Component{
                                     'destination': trip.destination,
                                     'start_date': trip.start_date,
                                     'end_date': trip.end_date,
-                                    'trip_id': trip.id,
+                                    'id': trip.id,
                                     'type': 'actual',
                                     'color': '#2F496E'
                                 }
@@ -84,9 +84,9 @@ export default class extends Component{
         alert("Hello World")
     }
 
-    goTo(e, view){
+    goTo(e, view, data){
         const { navigate } = this.props.navigation;
-        navigate(view, {userData: this.state.userData})
+        navigate(view, {userData: this.state.userData, tripID: data})
     }
 
     render(){
@@ -94,10 +94,7 @@ export default class extends Component{
             <ScrollView style={styles.viewHome}>
                 <Text style={styles.titleMain}>My Trips</Text>
                 <TouchableScale style={styles.buttonBack} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
-                    <Ionicons style={styles.buttonBackIcon} name="md-arrow-round-back" size={20} color="white" />
-                </TouchableScale>
-                <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
-                    <Ionicons style={styles.buttonBackIcon} name="ios-add" size={20} color="white" />
+                    <Ionicons name="md-arrow-round-back" size={20} color="white" />
                 </TouchableScale>
                 {
                     this.state.trips.map((item, i) => (
@@ -112,7 +109,7 @@ export default class extends Component{
                             subtitleStyle={styles.subtitleStyle}
                             containerStyle={[styles.containerList, {backgroundColor: item.color}]}
                             contentContainerStyle={{marginLeft: '5%'}}
-                            onPress={(e)=> this.goDetails(e)}
+                            onPress={(e)=> this.goTo(e, 'Trip Details', item.id)}
                         />
                     ))
                 }
@@ -148,7 +145,7 @@ const styles = StyleSheet.create({
         fontSize: hp('1.5%')
     },
     titleMain: {
-        marginTop: hp('4%'),
+        marginTop: hp('5%'),
         marginBottom: hp('2%'),
         textAlign: 'center',
         fontWeight: 'bold',
@@ -161,7 +158,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         position: 'absolute',
         left: wp('4%'),
-        top: hp('3%'),
+        top: hp('5%'),
         marginBottom: hp('-5%'),
         padding: 8,
         flex: 1,
@@ -181,7 +178,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         position: 'absolute',
         right: wp('4%'),
-        top: hp('3%'),
+        top: hp('5%'),
         marginBottom: hp('-5%'),
         padding: 8,
         flex: 1,

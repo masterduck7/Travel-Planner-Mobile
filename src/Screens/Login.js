@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import { ImageBackground, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, ImageBackground, StyleSheet, View } from 'react-native';
 import { Button, Card, Input, Text } from 'react-native-elements';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Dusseldorf from '../../assets/Covers/Dusseldorf.png';
@@ -8,7 +8,6 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 export default class Login extends Component{
-
     constructor(props){
         super(props)
         this.state = {
@@ -40,7 +39,7 @@ export default class Login extends Component{
 
     render(){
         return(
-            <View style={{flex: 1 , flexDirection: 'row'}}>
+            <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={-hp('50%')} style={{flex: 1 , flexDirection: 'row'}}>
                 <ImageBackground source={Dusseldorf} style={styles.image}>
                     < Text h1 style={{ position: "absolute" ,top: hp("10%") }}>Travel Planner</Text>
                     
@@ -84,7 +83,7 @@ export default class Login extends Component{
                         </View>
                     </Card>
                 </ImageBackground>
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 }
