@@ -96,9 +96,6 @@ export default class MyTrips extends Component{
                 <TouchableScale style={styles.buttonBack} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
                     <Ionicons name="md-arrow-round-back" size={20} color="white" />
                 </TouchableScale>
-                <TouchableScale disabled={true} style={styles.buttonAdd} friction={90} tension={100} onPress={(e) => this.goTo(e, 'Home')}>
-                    <Ionicons name="ios-add" size={20} color="white" />
-                </TouchableScale>
                 {
                     this.state.trips.map((item, i) => (
                         <ListItem

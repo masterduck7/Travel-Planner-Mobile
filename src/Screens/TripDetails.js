@@ -29,7 +29,12 @@ export default class TripDetails extends Component{
             selectedCity: 'Select City',
             selectedCityKey: '',
             nameCost: '',
-            priceCost: ''
+            priceCost: '',
+            modalFlightDetail: false,
+            flightSelected: {},
+            modalHotelDetail: false,
+            hotelSelected: {},
+            breakfastHotelSelected: ""
         }
     }
 
@@ -54,6 +59,7 @@ export default class TripDetails extends Component{
                     var costs = []
                     var activities = []
                     var cities = {}
+                    var flights = res.data.flights
                     res.data.cities.forEach(city => {
                         cities[city.name] = city.id
                         city.hotels.forEach(hotel => {
@@ -66,11 +72,23 @@ export default class TripDetails extends Component{
                             costs.push(cost)
                         });
                     });
+                    flights = flights.sort(function(a, b) {
+                        var dateA = new Date(a.start_date), dateB = new Date(b.start_date);
+                        return dateA - dateB;
+                    });
+                    hotels = hotels.sort(function(a, b) {
+                        var dateA = new Date(a.start_date), dateB = new Date(b.start_date);
+                        return dateA - dateB;
+                    });
+                    activities = activities.sort(function(a, b) {
+                        var dateA = new Date(a.activity_date), dateB = new Date(b.activity_date);
+                        return dateA - dateB;
+                    });
                     this.setState({
                         cityList: cities,
                         tripData: res.data,
                         cities: res.data.cities,
-                        flights: res.data.flights,
+                        flights: flights,
                         hotels: hotels,
                         costs: costs,
                         activities: activities
@@ -95,6 +113,18 @@ export default class TripDetails extends Component{
         this.setState({selectedTab: value})
     }
 
+    selectFlight(item){
+        this.setState({flightSelected: item, modalFlightDetail: true})
+    }
+
+    selectHotel(item){
+        if (item.breakfast) {
+            this.setState({hotelSelected: item, modalHotelDetail: true, breakfastHotelSelected: "YES"})   
+        } else {
+            this.setState({hotelSelected: item, modalHotelDetail: true, breakfastHotelSelected: "NO"})
+        }
+    }
+
     renderElement(){
         if (this.state.selectedTab === 'cities') {
             return(
@@ -112,7 +142,6 @@ export default class TripDetails extends Component{
                                 titleStyle={styles.titleStyle}
                                 containerStyle={[styles.containerList, {backgroundColor: '#2F496E'}]}
                                 contentContainerStyle={{marginLeft: '5%'}}
-                                onPress={(e)=> this.goTo(e, 'Trip Details', item.id)}
                             />
                         ))
                     }
@@ -136,7 +165,7 @@ export default class TripDetails extends Component{
                                 subtitleStyle={styles.subtitleStyle}
                                 containerStyle={[styles.containerList, {backgroundColor: '#2F496E'}]}
                                 contentContainerStyle={{marginLeft: '5%'}}
-                                onPress={(e)=> this.goTo(e, 'Trip Details', item.id)}
+                                onPress={(e)=> this.selectFlight(item)}
                             />
                         ))
                     }
@@ -160,7 +189,7 @@ export default class TripDetails extends Component{
                                 subtitleStyle={styles.subtitleStyle}
                                 containerStyle={[styles.containerList, {backgroundColor: '#2F496E'}]}
                                 contentContainerStyle={{marginLeft: '5%'}}
-                                onPress={(e)=> this.goTo(e, 'Trip Details', item.id)}
+                                onPress={(e)=> this.selectHotel(item)}
                             />
                         ))
                     }
@@ -184,7 +213,6 @@ export default class TripDetails extends Component{
                                 subtitleStyle={styles.subtitleStyle}
                                 containerStyle={[styles.containerList, {backgroundColor: '#2F496E'}]}
                                 contentContainerStyle={{marginLeft: '5%'}}
-                                onPress={(e)=> this.goTo(e, 'Trip Details', item.id)}
                             />
                         ))
                     }
@@ -205,13 +233,10 @@ export default class TripDetails extends Component{
                                 Component={TouchableScale}
                                 friction={90}
                                 tension={100}
-                                title={item.name}
-                                titleStyle={styles.titleStyle}
-                                subtitle= {item.badge_total_price + " " + item.total_price}
-                                subtitleStyle={styles.subtitleStyle}
+                                title={item.name + " (" + item.badge_total_price + " " + item.total_price + ")"}
+                                titleStyle={styles.titleCostStyle}
                                 containerStyle={[styles.containerList, {backgroundColor: '#2F496E'}]}
                                 contentContainerStyle={{marginLeft: '5%'}}
-                                onPress={(e)=> this.goTo(e, 'Trip Details', item.id)}
                             />
                         ))
                     }
@@ -259,6 +284,22 @@ export default class TripDetails extends Component{
     showMenu = () => {
         this._menu.show();
     };
+
+    paid = () => {
+        if (this.state.hotelSelected.amount_paid !== this.state.hotelSelected.total_price) {
+            return(
+                <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> PAID</Text>: USD {this.state.hotelSelected.amount_paid}/{this.state.hotelSelected.total_price}</Text>
+            )
+        }
+    }
+
+    notPaid = () => {
+        if (this.state.hotelSelected.amount_not_paid !== 0) {
+            return(
+                <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> NOT PAID</Text>: USD {this.state.hotelSelected.amount_not_paid}</Text>
+            )
+        }
+    }
 
     render(){
         let myCities = Object.entries(this.state.cityList).map(([key, value]) => {
@@ -319,6 +360,57 @@ export default class TripDetails extends Component{
                     </View>
                     </KeyboardAvoidingView>
                 </Modal>
+                {/* Flight detail modal */}
+                <Modal
+                    visible={this.state.modalFlightDetail}
+                    transparent={true}
+                    animationType = {"slide"}
+                    onRequestClose={() => this.setState({modalFlightDetail: false})}
+                >
+                    <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={hp('8%')}>
+                    <View style={styles.modal}>
+                        <Text style={styles.modalTitle}>{this.state.flightSelected.destination}</Text>
+                        <View style={{alignItems: 'flex-start', left: wp('-3%')}}>
+                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> ORIGIN</Text>: {this.state.flightSelected.origin}</Text>
+                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> FLIGHTS</Text>: {moment(this.state.flightSelected.start_date).format("DD/MM/YY")} - {moment(this.state.flightSelected.end_date).format("DD/MM/YY")}</Text>
+                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> AIRLINE</Text>: {this.state.flightSelected.airline_name}</Text>
+                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> FLIGHT NUMBER</Text>: {this.state.flightSelected.flight_number}</Text>
+                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> PRICE</Text>: USD {this.state.flightSelected.price}</Text>
+                        </View>
+                        <View style={styles.buttonContainer}>
+                            <TouchableScale style={{...styles.buttonConfirm, backgroundColor: '#ED8C72', marginLeft: wp('3%')}} friction={90} tension={100} onPress={(e) => this.setState({modalFlightDetail: false})}>
+                                <Text style={styles.buttonText}>Close</Text>
+                            </TouchableScale>
+                        </View>
+                    </View>
+                    </KeyboardAvoidingView>
+                </Modal>
+                {/* Hotel detail modal */}
+                <Modal
+                    visible={this.state.modalHotelDetail}
+                    transparent={true}
+                    animationType = {"slide"}
+                    onRequestClose={() => this.setState({modalHotelDetail: false})}
+                >
+                    <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={hp('8%')}>
+                    <View style={styles.modal}>
+                        <Text style={styles.modalTitle}>{this.state.hotelSelected.name}</Text>
+                        <View style={{alignItems: 'flex-start', left: wp('-3%')}}>
+                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> DATES</Text>: {moment(this.state.hotelSelected.start_date).format("DD/MM/YY")} - {moment(this.state.flightSelected.end_date).format("DD/MM/YY")}</Text>
+                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> BEDS</Text>: {this.state.hotelSelected.number_beds}</Text>
+                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> BREAKFAST</Text>: {this.state.breakfastHotelSelected} </Text>
+                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> PRICE</Text>: {this.state.hotelSelected.total_price} </Text>
+                            {this.paid()}
+                            {this.notPaid()}
+                        </View>
+                        <View style={styles.buttonContainer}>
+                            <TouchableScale style={{...styles.buttonConfirm, backgroundColor: '#ED8C72', marginLeft: wp('3%')}} friction={90} tension={100} onPress={(e) => this.setState({modalHotelDetail: false})}>
+                                <Text style={styles.buttonText}>Close</Text>
+                            </TouchableScale>
+                        </View>
+                    </View>
+                    </KeyboardAvoidingView>
+                </Modal>
                 <Text style={styles.titleMain}>{this.state.tripData.destination}</Text>
                 <TouchableScale style={styles.buttonBack} friction={90} tension={100} onPress={(e) => this.goTo(e, 'My Trips', this.state.userData )}>
                     <Ionicons name="md-arrow-round-back" size={20} color="white" />
@@ -371,6 +463,11 @@ const styles = StyleSheet.create({
     subtitleStyle: {
         color: 'white',
         fontSize: hp('1.5%')
+    },
+    titleCostStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: hp('1.6%')
     },
     titleMain: {
         marginTop: hp('4%'),
