@@ -448,9 +448,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     containerList: {
-        marginLeft: '4%',
-        marginRight: '4%',
-        marginTop: '2%',
+        marginLeft: wp('4%'),
+        marginRight: wp('4%'),
+        marginTop: hp('0.5%'),
         borderRadius: 20,
         borderWidth: 0,
         backgroundColor: '#2F496E'
@@ -470,14 +470,15 @@ const styles = StyleSheet.create({
         fontSize: hp('1.6%')
     },
     titleMain: {
-        marginTop: hp('4%'),
+        marginTop: hp('7%'),
         marginBottom: hp('2%'),
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: hp('3%')
     },
     titleSub: {
-        marginTop: hp('4%'),
+        marginTop: hp('3%'),
+        marginBottom: hp('1%'),
         textAlign: 'center',
         fontSize: hp('2.5%')
     },
@@ -537,7 +538,7 @@ const styles = StyleSheet.create({
     cardButtonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginTop: hp('4%'),
+        marginTop: hp('2%'),
         marginLeft: wp('3%'),
         marginRight: wp('3%')
     },

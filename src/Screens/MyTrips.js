@@ -128,9 +128,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     containerList: {
-        marginLeft: '4%',
-        marginRight: '4%',
-        marginTop: '2%',
+        marginLeft: wp('4%'),
+        marginRight: wp('4%'),
+        marginTop: hp('0.5%'),
         borderRadius: 20,
         borderWidth: 0,
         backgroundColor: '#2F496E'
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
         fontSize: hp('1.5%')
     },
     titleMain: {
-        marginTop: hp('5%'),
+        marginTop: hp('7%'),
         marginBottom: hp('2%'),
         textAlign: 'center',
         fontWeight: 'bold',

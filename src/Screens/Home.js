@@ -192,9 +192,9 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     },
     containerList: {
-        marginLeft: '4%',
-        marginRight: '4%',
-        marginTop: '2%',
+        marginLeft: wp('4%'),
+        marginRight: wp('4%'),
+        marginTop: hp('0.5%'),
         borderRadius: 20,
         borderWidth: 0
     },
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         position: 'absolute',
         right: wp('4%'),
-        top: hp('4%'),
+        top: hp('5%'),
         marginBottom: hp('-5%'),
         padding: 8
     },
@@ -252,8 +252,9 @@ const styles = StyleSheet.create({
     hello: {
         marginTop: hp('5%'),
         marginBottom: hp('2%'),
-        marginLeft: wp('5%'),
-        fontSize: hp('2%'),
+        marginLeft: wp('7%'),
+        fontWeight: 'bold',
+        fontSize: hp('2.5%'),
     },
     nextTrips: {
         marginTop: hp('2%'),
