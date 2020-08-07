@@ -31,17 +31,6 @@ export default class Home extends Component{
         this.getData(this.props.route.params.userData)
     }
 
-    componentWillUnmount(){
-        this.setState({
-            userData: {},
-            nextTrips: [],
-            number_trips : 0,
-            number_flights : 0,
-            number_cities : 0,
-            totalYear : 0
-        })
-    }
-
     getData(data){
         axios.get(`https://travelplanner.lpsoftware.space/api/trips_status_user?userID=${data.userID}&status=Active`,{
             headers: {
@@ -214,7 +203,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         position: 'absolute',
         right: wp('4%'),
-        top: hp('5%'),
+        top: hp('7%'),
         marginBottom: hp('-5%'),
         padding: 8
     },
@@ -250,7 +239,7 @@ const styles = StyleSheet.create({
         marginTop: hp('1%')
     },
     hello: {
-        marginTop: hp('5%'),
+        marginTop: hp('7%'),
         marginBottom: hp('2%'),
         marginLeft: wp('7%'),
         fontWeight: 'bold',

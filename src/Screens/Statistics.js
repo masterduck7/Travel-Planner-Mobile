@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     },
     titleMain: {
         marginTop: hp('7%'),
-        marginBottom: hp('2%'),
+        marginBottom: hp('5%'),
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: hp('3%')

@@ -24,13 +24,6 @@ export default class MyTrips extends Component{
         this.getData(this.props.route.params.userData)
     }
 
-    componentWillUnmount(){
-        this.setState({
-            userData: {},
-            trips: []
-        })
-    }
-
     getData(data){
         axios.get(`https://travelplanner.lpsoftware.space/api/trips_user?userID=${data.userID}`,{
             headers: {
