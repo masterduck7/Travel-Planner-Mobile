@@ -3,7 +3,7 @@ import axios from 'axios';
 import { KeyboardAvoidingView, ImageBackground, StyleSheet, View } from 'react-native';
 import { Button, Card, Input, Text } from 'react-native-elements';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Dusseldorf from '../../assets/Covers/Dusseldorf.png';
+import Dusseldorf from '../../assets/Covers/Dusseldorf.jpg';
 import { Ionicons } from '@expo/vector-icons';
 
 
