@@ -371,11 +371,11 @@ export default class TripDetails extends Component{
                     <View style={styles.modal}>
                         <Text style={styles.modalTitle}>{this.state.flightSelected.destination}</Text>
                         <View style={{alignItems: 'flex-start', left: wp('-3%')}}>
-                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> ORIGIN</Text>: {this.state.flightSelected.origin}</Text>
-                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> FLIGHTS</Text>: {moment(this.state.flightSelected.start_date).format("DD/MM/YY")} - {moment(this.state.flightSelected.end_date).format("DD/MM/YY")}</Text>
-                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> AIRLINE</Text>: {this.state.flightSelected.airline_name}</Text>
-                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> FLIGHT NUMBER</Text>: {this.state.flightSelected.flight_number}</Text>
-                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> PRICE</Text>: USD {this.state.flightSelected.price}</Text>
+                            <Text style={styles.textModal}><Text style={{fontWeight: "bold"}}> ORIGIN</Text>: {this.state.flightSelected.origin}</Text>
+                            <Text style={styles.textModal}><Text style={{fontWeight: "bold"}}> FLIGHTS</Text>: {moment(this.state.flightSelected.start_date).format("DD/MM/YY")} - {moment(this.state.flightSelected.end_date).format("DD/MM/YY")}</Text>
+                            <Text style={styles.textModal}><Text style={{fontWeight: "bold"}}> AIRLINE</Text>: {this.state.flightSelected.airline_name}</Text>
+                            <Text style={styles.textModal}><Text style={{fontWeight: "bold"}}> FLIGHT NUMBER</Text>: {this.state.flightSelected.flight_number}</Text>
+                            <Text style={styles.textModal}><Text style={{fontWeight: "bold"}}> PRICE</Text>: USD {this.state.flightSelected.price}</Text>
                         </View>
                         <View style={styles.buttonContainer}>
                             <TouchableScale style={{...styles.buttonConfirm, backgroundColor: '#ED8C72', marginLeft: wp('3%')}} friction={90} tension={100} onPress={(e) => this.setState({modalFlightDetail: false})}>
@@ -396,10 +396,10 @@ export default class TripDetails extends Component{
                     <View style={styles.modal}>
                         <Text style={styles.modalTitle}>{this.state.hotelSelected.name}</Text>
                         <View style={{alignItems: 'flex-start', left: wp('-3%')}}>
-                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> DATES</Text>: {moment(this.state.hotelSelected.start_date).format("DD/MM/YY")} - {moment(this.state.flightSelected.end_date).format("DD/MM/YY")}</Text>
-                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> BEDS</Text>: {this.state.hotelSelected.number_beds}</Text>
-                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> BREAKFAST</Text>: {this.state.breakfastHotelSelected} </Text>
-                            <Text style={{marginBottom: hp("1%")}}><Text style={{fontWeight: "bold"}}> PRICE</Text>: {this.state.hotelSelected.total_price} </Text>
+                            <Text style={styles.textModal}><Text style={{fontWeight: "bold"}}> DATES</Text>: {moment(this.state.hotelSelected.start_date).format("DD/MM/YY")} - {moment(this.state.flightSelected.end_date).format("DD/MM/YY")}</Text>
+                            <Text style={styles.textModal}><Text style={{fontWeight: "bold"}}> BEDS</Text>: {this.state.hotelSelected.number_beds}</Text>
+                            <Text style={styles.textModal}><Text style={{fontWeight: "bold"}}> BREAKFAST</Text>: {this.state.breakfastHotelSelected} </Text>
+                            <Text style={styles.textModal}><Text style={{fontWeight: "bold"}}> PRICE</Text>: {this.state.hotelSelected.total_price} </Text>
                             {this.paid()}
                             {this.notPaid()}
                         </View>
@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         position: 'absolute',
         right: wp('4%'),
-        top: hp('3%'),
+        top: hp('2%'),
         padding: 8,
         flex: 1,
         flexDirection: 'row',
@@ -545,12 +545,12 @@ const styles = StyleSheet.create({
     modal: {
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#B9C4C9',
+        backgroundColor: '#1995AD',
         borderRadius: 10,
-        marginTop: hp("30%"),
+        marginTop: hp("27%"),
         height: hp('35%'),
-        width: wp('80%'),
-        margin: wp("10%")
+        width: wp('92%'),
+        marginLeft: wp("4%")
     },
     textLogin: {
         borderBottomWidth: 0,
@@ -561,7 +561,12 @@ const styles = StyleSheet.create({
         marginBottom: hp('2%'),
         textAlign: 'center',
         fontWeight: 'bold',
-        fontSize: hp('2.5%')
+        fontSize: hp('2.5%'),
+        color: 'white'
+    },
+    textModal: {
+        marginBottom: hp("1%"),
+        color: 'white'
     },
     inputModal: {
         width: wp('70%'),
