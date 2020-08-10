@@ -51,6 +51,7 @@ export default class Login extends Component{
                                 inputContainerStyle={styles.textLogin}
                                 placeholderTextColor="gray"
                                 placeholder='Username'
+                                textContentType="username"
                                 leftIcon={<Ionicons name='md-person' size={20}/>}
                                 onChangeText={text => this.setState({username:text})}
                             />
@@ -63,6 +64,7 @@ export default class Login extends Component{
                                 placeholderTextColor="gray"
                                 placeholder='Password'
                                 secureTextEntry
+                                textContentType="password"
                                 leftIcon={<Ionicons name='md-key' size={20}/>}
                                 onChangeText={text => this.setState({password:text})}
                             />

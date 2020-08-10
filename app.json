@@ -25,12 +25,7 @@
     "android": {
       "versionCode": 1,
       "package": "com.lpsoftware.travel_planner",
-      "permissions": [
-        "MANAGE_DOCUMENTS",
-        "READ_EXTERNAL_STORAGE",
-        "WAKE_LOCK",
-        "WRITE_EXTERNAL_STORAGE"
-      ]
+      "permissions": []
     }
   }
 }
